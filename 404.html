@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Lost in the Rift</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:  #0D0B14;
+    --ivory: #E8DFB8;
+    --gold:  #B8A97A;
+    --gold-bright: #D4C285;
+    --purple:#7B5EA7;
+    --lilac: #C4A8FF;
+    --abyss: #241D3A;
+    --border-dim: rgba(196,168,255,0.08);
+    --border-gold:rgba(184,169,122,0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--void);
+    color: var(--ivory);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    overflow: hidden;
+  }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.6;
+  }
+
+  /* Aether ambient */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(123,94,167,0.1) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 560px;
+  }
+
+  /* Rings */
+  .rings {
+    position: absolute; inset: -200px;
+    pointer-events: none;
+  }
+  .ring {
+    position: absolute; inset: 0;
+    border-radius: 50%; border: 1px solid;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+  .ring-1 { width: 320px; height: 320px; border-color: rgba(196,168,255,0.05); animation: ringPulse 5s ease-in-out infinite; }
+  .ring-2 { width: 480px; height: 480px; border-color: rgba(184,169,122,0.04); animation: ringPulse 5s ease-in-out 1.5s infinite; }
+  .ring-3 { width: 640px; height: 640px; border-color: rgba(196,168,255,0.03); animation: ringPulse 5s ease-in-out 3s infinite; }
+
+  @keyframes ringPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.02); }
+  }
+
+  .error-code {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(80px, 20vw, 140px);
+    font-weight: 700; line-height: 1;
+    color: transparent;
+    background: linear-gradient(135deg, rgba(196,168,255,0.15), rgba(184,169,122,0.3));
+    -webkit-background-clip: text; background-clip: text;
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .error-label {
+    font-family: 'Cinzel', serif; font-size: 11px;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--gold); opacity: 0.6;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .error-ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; color: var(--gold); opacity: 0.3;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .error-ornament::before, .error-ornament::after {
+    content: '';
+    display: block; height: 1px; width: 80px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .error-ornament::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  .error-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(20px, 5vw, 32px); font-weight: 400;
+    color: var(--ivory); margin-bottom: 16px;
+    text-shadow: 0 0 40px rgba(196,168,255,0.15);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .error-desc {
+    font-style: italic; font-size: 18px;
+    color: rgba(232,223,184,0.45); line-height: 1.8;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+
+  .error-quote {
+    padding: 20px 28px;
+    border: 1px solid var(--border-gold);
+    background: rgba(184,169,122,0.03);
+    margin-bottom: 48px; position: relative;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+  .error-quote::before {
+    content: '❝';
+    position: absolute; top: -14px; left: 20px;
+    font-size: 24px; color: var(--gold); line-height: 1;
+    background: var(--void); padding: 0 6px;
+  }
+  .error-quote p {
+    font-style: italic; font-size: 16px;
+    color: rgba(232,223,184,0.4); line-height: 1.7;
+  }
+  .error-quote cite {
+    display: block; margin-top: 10px;
+    font-family: 'Cinzel', serif; font-size: 9px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-style: normal; opacity: 0.5;
+  }
+
+  .btn-return {
+    font-family: 'Cinzel', serif; font-size: 11px;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    text-decoration: none; color: var(--void);
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    padding: 14px 40px; display: inline-block;
+    transition: box-shadow 0.3s, transform 0.2s;
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+  .btn-return:hover {
+    box-shadow: 0 0 30px rgba(184,169,122,0.4);
+    transform: translateY(-1px);
+  }
+
+  .natsume-says {
+    margin-top: 48px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: rgba(196,168,255,0.25); letter-spacing: 0.1em;
+    animation: fadeUp 0.8s ease 0.9s both;
+  }
+  .natsume-says span { color: rgba(196,168,255,0.4); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <div class="rings">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+  </div>
+
+  <div class="container">
+    <div class="error-code">404</div>
+    <div class="error-label">∙ &nbsp; Lost in the Rift &nbsp; ∙</div>
+
+    <div class="error-ornament">✦</div>
+
+    <div class="error-title">The Path Does Not Exist</div>
+    <p class="error-desc">
+      You have wandered beyond the edge of the map.<br>
+      Not even Natsume's memory holds this place.
+    </p>
+
+    <div class="error-quote">
+      <p>I searched my memories. Every last one. This path leads nowhere, Master.</p>
+      <cite>— Natsume Tsurugi</cite>
+    </div>
+
+    <a href="/" class="btn-return">Return to the Sanctuary</a>
+
+    <div class="natsume-says">
+      <span>NATSUME.AI</span> &nbsp;·&nbsp; v0.4.0 &nbsp;·&nbsp; © 2025 CrOliX-AltF4
+    </div>
+  </div>
+</body>
+</html>
