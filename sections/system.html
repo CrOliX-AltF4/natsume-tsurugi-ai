@@ -1,0 +1,99 @@
+<section id="scene-system" class="scene">
+  <div class="scene-inner">
+
+    <div class="label reveal">Inner Workings</div>
+    <h2 class="reveal d1" style="margin:16px 0 48px;color:var(--ivory);">The <em style="color:var(--crimson-2)">Aetherial</em> Engine</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:48px;">
+
+      <!-- Pipeline -->
+      <div>
+        <div class="label reveal" style="margin-bottom:16px;">Voice Pipeline</div>
+        <div class="quest-scroll reveal d1">
+          <div class="quest-scroll-header">
+            <span class="quest-title">Processing Chain</span>
+            <span class="quest-badge active">Live</span>
+          </div>
+          <div class="quest-body">
+            <div class="pipeline">
+              <div class="pipe-row"><div class="pipe-icon done" id="pdot-0"></div><span class="pipe-name done" id="pname-0">Speech Capture</span><span class="pipe-time done" id="ptime-0">+0ms</span></div>
+              <div class="pipe-row"><div class="pipe-icon done" id="pdot-1"></div><span class="pipe-name done" id="pname-1">Wake Word</span><span class="pipe-time done" id="ptime-1">+120ms</span></div>
+              <div class="pipe-row"><div class="pipe-icon active" id="pdot-2"></div><span class="pipe-name active" id="pname-2">LLM Stream</span><span class="pipe-time active" id="ptime-2">+380ms</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-3"></div><span class="pipe-name idle" id="pname-3">Sentence Split</span><span class="pipe-time idle" id="ptime-3">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-4"></div><span class="pipe-name idle" id="pname-4">SSML + TTS</span><span class="pipe-time idle" id="ptime-4">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-5"></div><span class="pipe-name idle" id="pname-5">RVC Voice</span><span class="pipe-time idle" id="ptime-5">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-6"></div><span class="pipe-name idle" id="pname-6">Lip-sync · Avatar</span><span class="pipe-time idle" id="ptime-6">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emotions -->
+      <div>
+        <div class="label reveal" style="margin-bottom:16px;">Emotional State</div>
+        <div class="quest-scroll mood-container reveal d1">
+          <div class="quest-scroll-header">
+            <span class="quest-title">Current Affect</span>
+            <span class="quest-badge active">Live</span>
+          </div>
+          <div class="quest-body" style="padding-top:20px;">
+            <div class="mood-row"><span class="mood-label">Neutral</span><div class="mood-track"><div class="mood-fill primary" style="width:0%"></div></div><span class="mood-pct">62%</span></div>
+            <div class="mood-row"><span class="mood-label">Curious</span><div class="mood-track"><div class="mood-fill secondary" style="width:0%"></div></div><span class="mood-pct">22%</span></div>
+            <div class="mood-row"><span class="mood-label">Bored</span><div class="mood-track"><div class="mood-fill minor" style="width:0%"></div></div><span class="mood-pct">9%</span></div>
+            <div class="mood-row"><span class="mood-label">Sad</span><div class="mood-track"><div class="mood-fill minor" style="width:0%"></div></div><span class="mood-pct">5%</span></div>
+            <div class="mood-row"><span class="mood-label">Angry</span><div class="mood-track"><div class="mood-fill minor" style="width:0%"></div></div><span class="mood-pct">2%</span></div>
+            <div style="padding-top:16px;margin-top:8px;border-top:1px solid var(--border-dim);display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--ivory-faint);">Affinity</span>
+              <span style="font-family:var(--font-display);font-size:15px;color:var(--crimson-2);">Neutral · 52 / 100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Awareness hierarchy -->
+    <div class="label reveal" style="margin-bottom:16px;">Awareness Hierarchy</div>
+    <div class="quest-scroll reveal d1" style="margin-bottom:48px;">
+      <div class="quest-scroll-header">
+        <span class="quest-title">Perception Tiers</span>
+        <span class="quest-badge active">Active</span>
+      </div>
+      <div class="quest-body">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-dim);margin-top:8px;">
+          <div style="background:var(--black-card);padding:20px;">
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--gold);margin-bottom:8px;">I</div>
+            <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ivory);margin-bottom:6px;">Game Hook</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ivory-faint);line-height:1.6;">FF14 ACT · Zone / HP / Combat · WebSocket</div>
+            <div style="margin-top:12px;font-family:var(--font-mono);font-size:8px;color:var(--gold);letter-spacing:0.2em;border:1px solid var(--gold-dim);padding:2px 8px;display:inline-block;">FREE</div>
+          </div>
+          <div style="background:var(--black-card);padding:20px;">
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--crimson-2);margin-bottom:8px;">II</div>
+            <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ivory);margin-bottom:6px;">Window Context</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ivory-faint);line-height:1.6;">YouTube · Twitch · VS Code · Netflix</div>
+            <div style="margin-top:12px;font-family:var(--font-mono);font-size:8px;color:var(--gold);letter-spacing:0.2em;border:1px solid var(--gold-dim);padding:2px 8px;display:inline-block;">FREE</div>
+          </div>
+          <div style="background:var(--black-card);padding:20px;opacity:0.6;">
+            <div style="font-family:var(--font-display);font-size:22px;color:var(--ivory-faint);margin-bottom:8px;">III</div>
+            <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ivory-dim);margin-bottom:6px;">Vision Screenshot</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ivory-faint);line-height:1.6;">GPT-4o-mini · Throttled · $0.00011/img</div>
+            <div style="margin-top:12px;font-family:var(--font-mono);font-size:8px;color:var(--ivory-faint);letter-spacing:0.2em;border:1px solid var(--border-dim);padding:2px 8px;display:inline-block;">PAID</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="label reveal" style="margin-bottom:16px;">The Forge</div>
+    <div class="tech-grid reveal d1">
+      <div class="tech-cell"><div class="tech-domain">Runtime</div><div class="tech-name">Node.js 24</div><div class="tech-sub">TypeScript 5.x · Strict</div></div>
+      <div class="tech-cell"><div class="tech-domain">Language Model</div><div class="tech-name">GPT-4o-mini</div><div class="tech-sub">OpenAI · Groq · Ollama</div></div>
+      <div class="tech-cell"><div class="tech-domain">Voice Synthesis</div><div class="tech-name">Edge TTS</div><div class="tech-sub">AriaNeural · SSML · RVC</div></div>
+      <div class="tech-cell"><div class="tech-domain">Transcription</div><div class="tech-name">Whisper</div><div class="tech-sub">Groq cloud · Local</div></div>
+      <div class="tech-cell"><div class="tech-domain">Vision</div><div class="tech-name">GPT-4o</div><div class="tech-sub">detail:low · $0.00011/img</div></div>
+      <div class="tech-cell"><div class="tech-domain">Avatar</div><div class="tech-name">VTube Studio</div><div class="tech-sub">WebSocket · Live2D · PCM</div></div>
+      <div class="tech-cell"><div class="tech-domain">Game Data</div><div class="tech-name">ACT WS</div><div class="tech-sub">FF XIV · CombatData</div></div>
+      <div class="tech-cell"><div class="tech-domain">Communication</div><div class="tech-name">Discord.js</div><div class="tech-sub">Multi-speaker · LTM</div></div>
+    </div>
+
+  </div>
+</section>

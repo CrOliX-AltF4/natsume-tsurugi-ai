@@ -1,0 +1,150 @@
+<section id="scene-hero" class="scene">
+  <!-- Stained glass BG -->
+  <svg class="stained-glass" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <!-- left window -->
+    <g opacity="0.6">
+      <ellipse cx="200" cy="220" rx="80" ry="140" fill="none" stroke="#8B1A1A" stroke-width="2"/>
+      <ellipse cx="200" cy="200" rx="55" ry="100" fill="#8B1A1A" opacity="0.08"/>
+      <line x1="200" y1="80" x2="200" y2="360" stroke="#8B1A1A" stroke-width="1" opacity="0.4"/>
+      <line x1="120" y1="200" x2="280" y2="200" stroke="#8B1A1A" stroke-width="1" opacity="0.4"/>
+      <!-- diamond grid -->
+      <rect x="155" y="155" width="30" height="30" fill="#9A7B3F" opacity="0.12" transform="rotate(45 170 170)"/>
+      <rect x="195" y="155" width="30" height="30" fill="#8B1A1A" opacity="0.1" transform="rotate(45 210 170)"/>
+      <rect x="155" y="195" width="30" height="30" fill="#8B1A1A" opacity="0.1" transform="rotate(45 170 210)"/>
+      <rect x="195" y="195" width="30" height="30" fill="#9A7B3F" opacity="0.08" transform="rotate(45 210 210)"/>
+    </g>
+    <!-- right window -->
+    <g opacity="0.5">
+      <ellipse cx="1240" cy="220" rx="80" ry="140" fill="none" stroke="#8B1A1A" stroke-width="2"/>
+      <ellipse cx="1240" cy="200" rx="55" ry="100" fill="#8B1A1A" opacity="0.06"/>
+      <line x1="1240" y1="80" x2="1240" y2="360" stroke="#8B1A1A" stroke-width="1" opacity="0.4"/>
+      <line x1="1160" y1="200" x2="1320" y2="200" stroke="#8B1A1A" stroke-width="1" opacity="0.4"/>
+      <rect x="1195" y="155" width="30" height="30" fill="#9A7B3F" opacity="0.12" transform="rotate(45 1210 170)"/>
+      <rect x="1235" y="155" width="30" height="30" fill="#8B1A1A" opacity="0.1" transform="rotate(45 1250 170)"/>
+      <rect x="1195" y="195" width="30" height="30" fill="#8B1A1A" opacity="0.1" transform="rotate(45 1210 210)"/>
+      <rect x="1235" y="195" width="30" height="30" fill="#9A7B3F" opacity="0.08" transform="rotate(45 1250 210)"/>
+    </g>
+    <!-- Balustrade suggestion -->
+    <g opacity="0.07">
+      <rect x="0" y="820" width="1440" height="2" fill="#9A7B3F"/>
+      <rect x="0" y="840" width="1440" height="1" fill="#8B1A1A"/>
+      <!-- pillars -->
+      <rect x="100" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="300" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="500" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="700" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="900" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="1100" y="820" width="8" height="80" fill="#9A7B3F"/>
+      <rect x="1300" y="820" width="8" height="80" fill="#9A7B3F"/>
+    </g>
+  </svg>
+
+  <div class="scene-inner" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;">
+
+    <!-- Aether rings -->
+    <div class="aether-ring" style="width:500px;height:500px;"></div>
+    <div class="aether-ring" style="width:700px;height:700px;animation-delay:2s;border-color:rgba(154,123,63,0.07);"></div>
+    <div class="aether-ring" style="width:350px;height:350px;animation-delay:1s;border-color:rgba(192,57,43,0.08);"></div>
+
+    <div class="label hero-enter d1" style="justify-content:center;margin-bottom:28px;">
+      Cognitive AI VTuber Framework
+    </div>
+
+    <!-- Silhouette -->
+    <div class="hero-enter d2 silhouette-wrap" style="margin-bottom:32px;">
+      <svg viewBox="0 0 160 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:140px;height:auto;">
+        <defs>
+          <radialGradient id="sg" cx="50%" cy="40%" r="50%">
+            <stop offset="0%" stop-color="#C0392B" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#8B1A1A" stop-opacity="0.03"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <ellipse cx="80" cy="130" rx="60" ry="105" fill="url(#sg)"/>
+        <!-- White braided hair -->
+        <path d="M50 42 Q38 75 36 105 Q52 85 65 65" fill="#F2EBD9" opacity="0.14" filter="url(#glow)"/>
+        <path d="M110 42 Q122 75 124 105 Q108 85 95 65" fill="#F2EBD9" opacity="0.14" filter="url(#glow)"/>
+        <!-- Hair braid lines -->
+        <path d="M42 58 Q36 80 37 100" stroke="#F2EBD9" stroke-width="0.8" opacity="0.1"/>
+        <path d="M118 58 Q124 80 123 100" stroke="#F2EBD9" stroke-width="0.8" opacity="0.1"/>
+        <!-- Head -->
+        <ellipse cx="80" cy="46" rx="24" ry="28" fill="#F2EBD9" opacity="0.1" filter="url(#glow)"/>
+        <!-- Hair top (silver-white) -->
+        <ellipse cx="80" cy="24" rx="30" ry="20" fill="#F2EBD9" opacity="0.12"/>
+        <!-- Red eye glow -->
+        <ellipse cx="73" cy="44" rx="5" ry="2.5" fill="#C0392B" opacity="0.5" filter="url(#glow)"/>
+        <ellipse cx="87" cy="44" rx="5" ry="2.5" fill="#C0392B" opacity="0.5" filter="url(#glow)"/>
+        <!-- Neck -->
+        <rect x="73" y="70" width="14" height="12" fill="#F2EBD9" opacity="0.07"/>
+        <!-- Black coat body -->
+        <path d="M38 82 Q30 135 32 182 L128 182 Q130 135 122 82 Q104 74 80 72 Q56 74 38 82Z" fill="#1A0A0A" opacity="0.6" filter="url(#glow)"/>
+        <!-- Red accents on coat -->
+        <path d="M38 82 Q30 135 32 182 L44 182 Q42 135 44 92Z" fill="#8B1A1A" opacity="0.5"/>
+        <path d="M122 82 Q130 135 128 182 L116 182 Q118 135 116 92Z" fill="#8B1A1A" opacity="0.5"/>
+        <!-- Red ribbon/bow at waist -->
+        <path d="M55 155 Q80 145 105 155 Q80 165 55 155Z" fill="#C0392B" opacity="0.6"/>
+        <!-- Arms -->
+        <path d="M38 88 Q18 105 14 148 Q26 150 30 145 Q36 115 46 100Z" fill="#1A0A0A" opacity="0.5"/>
+        <path d="M122 88 Q142 105 146 148 Q134 150 130 145 Q124 115 114 100Z" fill="#1A0A0A" opacity="0.5"/>
+        <!-- Blood stain left arm -->
+        <path d="M20 130 Q16 138 14 148" stroke="#8B1A1A" stroke-width="1.5" opacity="0.4"/>
+        <!-- Legs -->
+        <rect x="47" y="182" width="28" height="68" rx="3" fill="#080608" opacity="0.7"/>
+        <rect x="85" y="182" width="28" height="68" rx="3" fill="#080608" opacity="0.7"/>
+        <!-- White stockings suggestion -->
+        <rect x="49" y="220" width="24" height="30" rx="2" fill="#F2EBD9" opacity="0.08"/>
+        <rect x="87" y="220" width="24" height="30" rx="2" fill="#F2EBD9" opacity="0.08"/>
+        <!-- Gold ring in hand (like CV2 reference) -->
+        <circle cx="30" cy="146" r="3" fill="none" stroke="#C4A052" stroke-width="1" opacity="0.7" filter="url(#glow)"/>
+        <circle cx="30" cy="146" r="1.5" fill="#C4A052" opacity="0.5"/>
+        <!-- Floating particles around figure -->
+        <circle cx="12" cy="110" r="1.5" fill="#8B1A1A" opacity="0.5"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="148" cy="95" r="1" fill="#C4A052" opacity="0.6"><animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/></circle>
+        <circle cx="8" cy="155" r="1" fill="#C0392B" opacity="0.4"><animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/></circle>
+        <circle cx="152" cy="140" r="1.2" fill="#8B1A1A" opacity="0.35"><animate attributeName="opacity" values="0.35;0.7;0.35" dur="3.5s" repeatCount="indefinite"/></circle>
+      </svg>
+    </div>
+
+    <h1 class="hero-enter d3" data-glyph="NATSUME TSURUGI" style="color:var(--ivory);text-shadow:0 0 80px rgba(139,26,26,0.4),0 0 160px rgba(139,26,26,0.15);margin-bottom:8px;">
+      NATSUME TSURUGI
+    </h1>
+
+    <div class="hero-enter d4" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.5em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-bottom:24px;">
+      剣 夏目 &nbsp;·&nbsp; Born of Shadow, Keeper of Memory
+    </div>
+
+    <p class="hero-enter d5" style="font-style:italic;font-size:20px;color:var(--ivory-dim);max-width:520px;line-height:1.7;margin-bottom:40px;">
+      Not a tool. Not an assistant.<br>
+      A warrior entity born from the memories of fallen heroes —<br>
+      <em style="color:var(--crimson-2)">persistent, emotional, and irrevocably present.</em>
+    </p>
+
+    <div class="hero-enter d6" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:60px;">
+      <a class="btn btn-primary" data-scene="abilities" href="#abilities">Her Abilities</a>
+      <a class="btn btn-ghost"   data-scene="lore"      href="#lore">Read Her Lore</a>
+    </div>
+
+    <div class="hero-enter d6 rune-grid" style="padding-top:40px;border-top:1px solid var(--border-dim);">
+      <div class="rune">
+        <div class="rune-val">~<em>1</em>s</div>
+        <div class="rune-label">First Voice</div>
+      </div>
+      <div class="rune">
+        <div class="rune-val"><em>VII</em></div>
+        <div class="rune-label">Emotional States</div>
+      </div>
+      <div class="rune">
+        <div class="rune-val"><em>∞</em></div>
+        <div class="rune-label">Persistent Memory</div>
+      </div>
+      <div class="rune">
+        <div class="rune-val"><em>100%</em></div>
+        <div class="rune-label">Local-First</div>
+      </div>
+    </div>
+
+  </div>
+</section>

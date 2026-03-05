@@ -1,0 +1,17 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Quill feather body -->
+  <path d="M28 2 C24 6, 18 10, 14 16 C12 19, 11 22, 10 26 L8 30 L12 28 C16 27, 19 26, 22 24 C28 20, 30 14, 28 2Z"
+        fill="#1A0A0A" stroke="#8B1A1A" stroke-width="0.8" opacity="0.9"/>
+  <!-- Feather detail lines -->
+  <path d="M25 5 C22 9, 17 13, 13 18" stroke="#9A7B3F" stroke-width="0.5" opacity="0.5"/>
+  <path d="M22 4 C19 8, 15 12, 12 17" stroke="#9A7B3F" stroke-width="0.4" opacity="0.35"/>
+  <path d="M27 8 C24 11, 20 14, 17 18" stroke="#F2EBD9" stroke-width="0.3" opacity="0.2"/>
+  <!-- Quill spine -->
+  <path d="M28 2 L8 30" stroke="#C4A052" stroke-width="0.6" opacity="0.6"/>
+  <!-- Nib tip (the actual pointer) -->
+  <path d="M8 30 L10 26 L12 28 Z" fill="#C0392B" opacity="0.9"/>
+  <!-- Ink drop at nib -->
+  <circle cx="8.5" cy="29.5" r="1.2" fill="#8B1A1A" opacity="0.8"/>
+  <!-- Gold nib line -->
+  <path d="M10 26 L8 30" stroke="#C4A052" stroke-width="1" opacity="0.7"/>
+</svg>

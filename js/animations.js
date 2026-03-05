@@ -7,6 +7,15 @@
 const Cursor = (() => {
   const cursor = document.getElementById('cursor');
 
+  async function loadSVG() {
+    if (!cursor) return;
+    try {
+      const resp = await fetch('assets/cursor-quill.svg');
+      const svg = await resp.text();
+      cursor.innerHTML = svg;
+    } catch (e) { console.error('Cursor SVG load fail'); }
+  }
+
   function setPos(x, y) {
     cursor.style.left = x + 'px';
     cursor.style.top  = y + 'px';
@@ -27,6 +36,8 @@ const Cursor = (() => {
       cursor.style.display = 'none';
       return;
     }
+
+    loadSVG();
 
     document.addEventListener('mousemove', (e) => {
       setPos(e.clientX, e.clientY);
@@ -207,6 +218,7 @@ const Pipeline = (() => {
   }
 
   function init() {
+    if (interval) clearInterval(interval);
     render();
     interval = setInterval(() => {
       active = (active + 1) % 7;
@@ -239,6 +251,7 @@ const Carousel = (() => {
     }
 
     function startAuto() {
+      if (autoplay) clearInterval(autoplay);
       autoplay = setInterval(() => go(current + 1), 5000);
     }
 
@@ -252,12 +265,12 @@ const Carousel = (() => {
 
     // Touch/swipe
     let touchX = 0;
-    wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; stopAuto(); });
+    wrap.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; stopAuto(); }, { passive: true });
     wrap.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - touchX;
       if (Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
       startAuto();
-    });
+    }, { passive: true });
 
     go(0);
     startAuto();
@@ -294,21 +307,6 @@ const MoodBars = (() => {
   return { init };
 })();
 
-/* ── NAV SCROLL STATE ── */
-const NavScroll = (() => {
-  const nav = document.getElementById('nav');
-
-  function init() {
-    document.querySelectorAll('.scene').forEach(scene => {
-      scene.addEventListener('scroll', () => {
-        nav?.classList.toggle('scrolled', scene.scrollTop > 20);
-      });
-    });
-  }
-
-  return { init };
-})();
-
 /* ── HAMBURGER ── */
 const Hamburger = (() => {
   function init() {
@@ -335,8 +333,8 @@ const Loader = (() => {
       setTimeout(() => {
         loader.classList.add('hidden');
         setTimeout(() => loader.remove(), 500);
-        // Init everything after load
-        initAll();
+        // Init core systems
+        initCore();
       }, 1800);
     });
   }
@@ -344,23 +342,16 @@ const Loader = (() => {
   return { init };
 })();
 
-/* ── INIT ALL ── */
-function initAll() {
+/* ── INIT CORE ── */
+function initCore() {
   Cursor.init();
   Particles.init();
   Animations.init();
-  GlyphWriter.init();
-  Pipeline.init();
-  Carousel.init('carousel-gallery');
-  MoodBars.init();
-  NavScroll.init();
   Hamburger.init();
-  ProgressBar.init();
   Router.init();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   Loader.init();
-  // If no loader, init directly
-  if (!document.getElementById('loader')) initAll();
+  if (!document.getElementById('loader')) initCore();
 });

@@ -1,21 +1,15 @@
 /* ═══════════════════════════════════════════
-   ROUTER — SPA Section Switching
+   ROUTER — Dynamic Section Loader
    Curtain transitions between scenes
    ═══════════════════════════════════════════ */
 
 const Router = (() => {
   let current = null;
   const curtain = document.getElementById('curtain');
+  const app = document.getElementById('app');
+  const cache = {}; // Store loaded HTML sections
 
-  const scenes = {
-    hero:     document.getElementById('scene-hero'),
-    lore:     document.getElementById('scene-lore'),
-    abilities:document.getElementById('scene-abilities'),
-    gallery:  document.getElementById('scene-gallery'),
-    system:   document.getElementById('scene-system'),
-    chronicle:document.getElementById('scene-chronicle'),
-    contact:  document.getElementById('scene-contact'),
-  };
+  const sceneIds = ['hero', 'lore', 'abilities', 'gallery', 'system', 'chronicle', 'contact'];
 
   function updateNav(id) {
     document.querySelectorAll('.nav-link').forEach(el => {
@@ -23,62 +17,83 @@ const Router = (() => {
     });
   }
 
-  function scrollToTop(id) {
-    const scene = scenes[id];
-    if (scene) scene.scrollTop = 0;
-  }
-
-  function triggerReveal(id) {
-    const scene = scenes[id];
+  function triggerReveal(scene) {
     if (!scene) return;
-    // Small delay to let scene become visible first
     setTimeout(() => {
-      scene.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el, i) => {
-        // Reset
-        el.classList.remove('visible');
-        // Re-trigger via intersection observer (handled in animations.js)
-      });
-      // Fire reveal for elements already in viewport
+      // Intersection observer check
       Animations.checkReveals(scene);
+      // Re-init specific animations if needed
+      if (scene.id === 'scene-hero') GlyphWriter.init();
+      if (scene.id === 'scene-gallery') Carousel.init('carousel-gallery');
+      if (scene.id === 'scene-system') {
+        Pipeline.init();
+        MoodBars.init();
+      }
     }, 50);
   }
 
-  function navigate(id, pushState = true) {
+  async function loadScene(id) {
+    if (cache[id]) return cache[id];
+
+    try {
+      const response = await fetch(`sections/${id}.html`);
+      const html = await response.text();
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      const section = temp.firstElementChild;
+      cache[id] = section;
+      return section;
+    } catch (err) {
+      console.error(`Failed to load scene: ${id}`, err);
+      return null;
+    }
+  }
+
+  async function navigate(id, pushState = true) {
     if (current === id) return;
-    if (!scenes[id]) return;
+    if (!sceneIds.includes(id)) return;
 
     // Curtain down
     curtain.classList.remove('up');
     curtain.classList.add('down');
 
-    setTimeout(() => {
-      // Hide current
-      if (current && scenes[current]) {
-        scenes[current].classList.remove('active');
-      }
-
-      // Show new
-      current = id;
-      scenes[id].classList.add('active');
-      scrollToTop(id);
-      updateNav(id);
-
-      // Update URL hash
-      if (pushState) {
-        history.pushState({ scene: id }, '', `#${id}`);
-      }
-
-      // Curtain up
+    // Preload
+    const newSection = await loadScene(id);
+    if (!newSection) {
       curtain.classList.remove('down');
       curtain.classList.add('up');
+      return;
+    }
 
-      // Trigger reveals
-      triggerReveal(id);
+    setTimeout(() => {
+      // Remove current section from DOM but keep in cache
+      app.innerHTML = '';
 
-      // Update progress bar
-      ProgressBar.reset();
+      // Add new section
+      app.appendChild(newSection);
 
-    }, 480); // matches curtain animation duration
+      // Trigger activation
+      requestAnimationFrame(() => {
+        newSection.classList.add('active');
+        newSection.scrollTop = 0;
+        
+        // Init scroll progress for the new scene
+        ProgressBar.initForScene(newSection);
+        
+        // Curtain up
+        curtain.classList.remove('down');
+        curtain.classList.add('up');
+
+        // Update state
+        current = id;
+        updateNav(id);
+        if (pushState) history.pushState({ scene: id }, '', `#${id}`);
+
+        // Trigger reveals and specific inits
+        triggerReveal(newSection);
+      });
+
+    }, 480);
   }
 
   function init() {
@@ -102,8 +117,7 @@ const Router = (() => {
 
     // Initial scene from hash or default
     const hash = window.location.hash.replace('#', '');
-    const initial = scenes[hash] ? hash : 'hero';
-    current = null;
+    const initial = sceneIds.includes(hash) ? hash : 'hero';
     navigate(initial, false);
   }
 
@@ -126,11 +140,18 @@ const ProgressBar = (() => {
     if (bar) bar.style.width = '0%';
   }
 
-  function init() {
-    document.querySelectorAll('.scene').forEach(scene => {
-      scene.addEventListener('scroll', () => update(scene));
+  function initForScene(scene) {
+    reset();
+    scene.addEventListener('scroll', () => update(scene));
+    // Initial check
+    update(scene);
+
+    // Also update NavScroll state
+    const nav = document.getElementById('nav');
+    scene.addEventListener('scroll', () => {
+      nav?.classList.toggle('scrolled', scene.scrollTop > 20);
     });
   }
 
-  return { update, reset, init };
+  return { update, reset, initForScene };
 })();
