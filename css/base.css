@@ -30,7 +30,7 @@
   --border-med:     rgba(242,235,217,0.12);
 
   /* Shadows */
-  --shadow-crimson: 0 0 40px rgba(139,26,26,0.3), 0 0 80px rgba(139,26,26,0.1);
+  --shadow-crimson: 0 0 40px rgba(139,26,26,0.4), 0 0 100px rgba(139,26,26,0.15);
   --shadow-gold:    0 0 20px rgba(154,123,63,0.35);
   --shadow-hard:    4px 4px 0 rgba(0,0,0,0.8);
 
@@ -116,7 +116,6 @@ h3 { font-size: clamp(18px, 2.5vw, 26px); }
   height: 32px;
   pointer-events: none;
   z-index: 10000;
-  /* anchor at nib tip — bottom-left of the quill */
   transform: translate(-4px, -28px);
   transition: none;
 }
@@ -128,40 +127,40 @@ h3 { font-size: clamp(18px, 2.5vw, 26px); }
               filter 0.25s ease;
 }
 
-/* Default: quill at rest */
 #cursor.state-default svg {
   transform: rotate(-45deg);
   filter: drop-shadow(0 0 3px rgba(139,26,26,0));
 }
 
-/* Hover clickable: quill tilts forward, ink glow */
 #cursor.state-hover svg {
   transform: rotate(-30deg) scale(1.15);
   filter: drop-shadow(0 0 6px rgba(192,57,43,0.7));
 }
 
-/* Press: nib dips */
 #cursor.state-press svg {
   transform: rotate(-50deg) scale(0.92) translateY(3px);
   filter: drop-shadow(0 0 10px rgba(192,57,43,0.9));
 }
 
-/* ── TAPESTRY GLYPH LAYER ── */
+/* ── TAPESTRY — REAL BLOOD CODE CREST ── */
 .tapestry {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 2;
-  opacity: 0.028;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3C!-- Diamond center --%3E%3Cpolygon points='60,20 80,40 60,60 40,40' fill='none' stroke='%23C4A052' stroke-width='0.8'/%3E%3Cpolygon points='60,25 75,40 60,55 45,40' fill='none' stroke='%238B1A1A' stroke-width='0.4'/%3E%3C!-- Cross arms --%3E%3Cline x1='60' y1='10' x2='60' y2='30' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='60' y1='50' x2='60' y2='70' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='30' y1='40' x2='50' y2='40' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='70' y1='40' x2='90' y2='40' stroke='%23C4A052' stroke-width='0.6'/%3E%3C!-- Corner micro-diamonds --%3E%3Cpolygon points='10,10 18,18 10,26 2,18' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='110,10 118,18 110,26 102,18' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='10,94 18,102 10,110 2,102' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='110,94 118,102 110,110 102,102' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3C!-- Dot grid --%3E%3Ccircle cx='60' cy='8' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='60' cy='72' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='28' cy='40' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='92' cy='40' r='1' fill='%23C4A052' opacity='0.6'/%3E%3C!-- Horizontal repeat connectors --%3E%3Cline x1='0' y1='40' x2='30' y2='40' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='90' y1='40' x2='120' y2='40' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='60' y1='0' x2='60' y2='10' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='60' y1='70' x2='60' y2='120' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3C!-- Blood vein lines --%3E%3Cline x1='0' y1='0' x2='30' y2='30' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='120' y1='0' x2='90' y2='30' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='0' y1='120' x2='30' y2='90' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='120' y1='120' x2='90' y2='90' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 120px 120px;
-  animation: tapestryShimmer 12s ease-in-out infinite;
+  opacity: 0.12; 
+  background-image: url("../assets/gula-bloodline-josee-4-blood-code-code-vein-2-wiki-guide-165px.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60vh;
+  /* Filter to make it look like a golden/crimson relic */
+  filter: sepia(1) saturate(2) hue-rotate(-15deg) drop-shadow(0 0 20px rgba(139,26,26,0.3));
+  animation: tapestryShimmer 20s ease-in-out infinite;
 }
 
 @keyframes tapestryShimmer {
-  0%, 100% { opacity: 0.028; }
-  50%       { opacity: 0.045; }
+  0%, 100% { opacity: 0.12; transform: scale(1); }
+  50%       { opacity: 0.18; transform: scale(1.03); }
 }
 
 /* ── GRAIN ── */

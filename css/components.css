@@ -805,6 +805,26 @@
   opacity: 0.6;
 }
 
+/* ── ABILITY ICONS (Blood Code) ── */
+.ability-icon-wrap {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.blood-code-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(154,123,63,0.4));
+  transition: filter var(--transition), transform var(--transition);
+}
+
+.card:hover .blood-code-icon {
+  filter: drop-shadow(0 0 12px var(--gold-bright));
+  transform: scale(1.1);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
   #nav { padding: 0 24px; }

@@ -86,17 +86,17 @@ const Particles = (() => {
     reset(initial = false) {
       this.x = Math.random() * W;
       this.y = initial ? Math.random() * H : H + 10;
-      this.size = Math.random() * 1.5 + 0.3;
-      this.speedY = -(Math.random() * 0.4 + 0.1);
-      this.speedX = (Math.random() - 0.5) * 0.15;
+      this.size = Math.random() * 2.5 + 0.5; // Slightly larger
+      this.speedY = -(Math.random() * 0.6 + 0.1);
+      this.speedX = (Math.random() - 0.5) * 0.2;
       this.alpha = 0;
-      this.maxAlpha = Math.random() * 0.25 + 0.05;
+      this.maxAlpha = Math.random() * 0.4 + 0.15; // Increased opacity
       this.life = 0;
-      this.maxLife = Math.random() * 400 + 200;
+      this.maxLife = Math.random() * 500 + 300;
       // Alternate between red ash and gold sparks
-      this.color = Math.random() > 0.7
+      this.color = Math.random() > 0.6
         ? `rgba(154,123,63,${this.maxAlpha})`
-        : `rgba(139,26,26,${this.maxAlpha})`;
+        : `rgba(192,57,43,${this.maxAlpha})`;
     }
 
     update() {
@@ -117,6 +117,11 @@ const Particles = (() => {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
+      // Add subtle glow to sparks
+      if (this.color.includes('154,123,63')) {
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = 'rgba(154,123,63,0.5)';
+      }
       ctx.restore();
     }
   }
@@ -125,7 +130,7 @@ const Particles = (() => {
     resize();
     window.addEventListener('resize', resize);
 
-    const count = Math.min(60, Math.floor(W * H / 20000));
+    const count = Math.min(100, Math.floor(W * H / 12000)); // Increased count
     for (let i = 0; i < count; i++) particles.push(new Particle());
 
     function tick() {
