@@ -1,0 +1,230 @@
+/* ═══════════════════════════════════════════
+   BASE — Variables · Reset · Typography
+   Natsume Tsurugi · Code Vein II aesthetic
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+:root {
+  /* Palette */
+  --black:        #080608;
+  --black-2:      #100810;
+  --black-3:      #1A0A0A;
+  --black-card:   #140B0B;
+  --crimson:      #8B1A1A;
+  --crimson-2:    #C0392B;
+  --crimson-dim:  rgba(139,26,26,0.15);
+  --crimson-glow: rgba(192,57,43,0.25);
+  --gold:         #9A7B3F;
+  --gold-bright:  #C4A052;
+  --gold-dim:     rgba(154,123,63,0.2);
+  --ivory:        #F2EBD9;
+  --ivory-dim:    rgba(242,235,217,0.6);
+  --ivory-faint:  rgba(242,235,217,0.25);
+  --white:        #FEFCF8;
+
+  /* Borders */
+  --border-gold:    rgba(154,123,63,0.3);
+  --border-crimson: rgba(139,26,26,0.4);
+  --border-dim:     rgba(242,235,217,0.06);
+  --border-med:     rgba(242,235,217,0.12);
+
+  /* Shadows */
+  --shadow-crimson: 0 0 40px rgba(139,26,26,0.3), 0 0 80px rgba(139,26,26,0.1);
+  --shadow-gold:    0 0 20px rgba(154,123,63,0.35);
+  --shadow-hard:    4px 4px 0 rgba(0,0,0,0.8);
+
+  /* Typography */
+  --font-display: 'Uncial Antiqua', 'Palatino Linotype', serif;
+  --font-body:    'Crimson Pro', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* Layout */
+  --nav-h: 70px;
+  --max-w: 1280px;
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--black);
+  color: var(--ivory);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.8;
+  overflow-x: hidden;
+  cursor: none; /* custom cursor */
+}
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { cursor: none; border: none; background: none; font: inherit; }
+ul, ol { list-style: none; }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+}
+
+h1 { font-size: clamp(44px, 6vw, 88px); }
+h2 { font-size: clamp(28px, 4vw, 52px); }
+h3 { font-size: clamp(18px, 2.5vw, 26px); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+/* ── CUSTOM CURSOR — suppress ALL system cursors ── */
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+#cursor {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 10000;
+  /* anchor at nib tip — bottom-left of the quill */
+  transform: translate(-4px, -28px);
+  transition: none;
+}
+
+#cursor svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
+              filter 0.25s ease;
+}
+
+/* Default: quill at rest */
+#cursor.state-default svg {
+  transform: rotate(-45deg);
+  filter: drop-shadow(0 0 3px rgba(139,26,26,0));
+}
+
+/* Hover clickable: quill tilts forward, ink glow */
+#cursor.state-hover svg {
+  transform: rotate(-30deg) scale(1.15);
+  filter: drop-shadow(0 0 6px rgba(192,57,43,0.7));
+}
+
+/* Press: nib dips */
+#cursor.state-press svg {
+  transform: rotate(-50deg) scale(0.92) translateY(3px);
+  filter: drop-shadow(0 0 10px rgba(192,57,43,0.9));
+}
+
+/* ── TAPESTRY GLYPH LAYER ── */
+.tapestry {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3C!-- Diamond center --%3E%3Cpolygon points='60,20 80,40 60,60 40,40' fill='none' stroke='%23C4A052' stroke-width='0.8'/%3E%3Cpolygon points='60,25 75,40 60,55 45,40' fill='none' stroke='%238B1A1A' stroke-width='0.4'/%3E%3C!-- Cross arms --%3E%3Cline x1='60' y1='10' x2='60' y2='30' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='60' y1='50' x2='60' y2='70' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='30' y1='40' x2='50' y2='40' stroke='%23C4A052' stroke-width='0.6'/%3E%3Cline x1='70' y1='40' x2='90' y2='40' stroke='%23C4A052' stroke-width='0.6'/%3E%3C!-- Corner micro-diamonds --%3E%3Cpolygon points='10,10 18,18 10,26 2,18' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='110,10 118,18 110,26 102,18' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='10,94 18,102 10,110 2,102' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3Cpolygon points='110,94 118,102 110,110 102,102' fill='none' stroke='%23C4A052' stroke-width='0.5'/%3E%3C!-- Dot grid --%3E%3Ccircle cx='60' cy='8' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='60' cy='72' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='28' cy='40' r='1' fill='%23C4A052' opacity='0.6'/%3E%3Ccircle cx='92' cy='40' r='1' fill='%23C4A052' opacity='0.6'/%3E%3C!-- Horizontal repeat connectors --%3E%3Cline x1='0' y1='40' x2='30' y2='40' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='90' y1='40' x2='120' y2='40' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='60' y1='0' x2='60' y2='10' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3Cline x1='60' y1='70' x2='60' y2='120' stroke='%23C4A052' stroke-width='0.3' opacity='0.5'/%3E%3C!-- Blood vein lines --%3E%3Cline x1='0' y1='0' x2='30' y2='30' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='120' y1='0' x2='90' y2='30' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='0' y1='120' x2='30' y2='90' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3Cline x1='120' y1='120' x2='90' y2='90' stroke='%238B1A1A' stroke-width='0.3' opacity='0.4'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 120px 120px;
+  animation: tapestryShimmer 12s ease-in-out infinite;
+}
+
+@keyframes tapestryShimmer {
+  0%, 100% { opacity: 0.028; }
+  50%       { opacity: 0.045; }
+}
+
+/* ── GRAIN ── */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+/* ── VIGNETTE ── */
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    transparent 40%,
+    rgba(139,26,26,0.12) 75%,
+    rgba(8,6,8,0.6) 100%
+  );
+}
+
+/* ── BLOOD PARTICLE CANVAS ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── SECTION TRANSITION CURTAIN ── */
+#curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  background: var(--black);
+  transform: translateY(-100%);
+}
+
+#curtain.down  { animation: curtainDown 0.5s cubic-bezier(0.76,0,0.24,1) forwards; }
+#curtain.up    { animation: curtainUp   0.5s cubic-bezier(0.76,0,0.24,1) forwards; }
+
+@keyframes curtainDown {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes curtainUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--crimson); }
+
+/* ── SELECTION ── */
+::selection {
+  background: var(--crimson);
+  color: var(--ivory);
+}

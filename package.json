@@ -1,0 +1,14 @@
+{
+  "name": "natsume-tsurugi-site",
+  "version": "1.0.0",
+  "description": "Natsume Tsurugi — Cognitive AI VTuber Framework showcase",
+  "scripts": {
+    "dev": "live-server --port=3000 --host=localhost --open=index.html",
+    "serve": "npx live-server --port=3000"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "author": "CrOliX-AltF4",
+  "license": "UNLICENSED"
+}

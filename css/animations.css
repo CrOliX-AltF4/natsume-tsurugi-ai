@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════
+   ANIMATIONS — Keyframes · Reveals · Effects
+   ═══════════════════════════════════════════ */
+
+/* ── REVEAL SYSTEM ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger delays */
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+.d5 { transition-delay: 0.5s; }
+.d6 { transition-delay: 0.6s; }
+.d7 { transition-delay: 0.7s; }
+.d8 { transition-delay: 0.8s; }
+
+/* ── HERO ENTRANCE ── */
+.hero-enter {
+  opacity: 0;
+  animation: heroEnter 1s ease forwards;
+}
+
+.hero-enter.d1 { animation-delay: 0.2s; }
+.hero-enter.d2 { animation-delay: 0.4s; }
+.hero-enter.d3 { animation-delay: 0.6s; }
+.hero-enter.d4 { animation-delay: 0.8s; }
+.hero-enter.d5 { animation-delay: 1.0s; }
+.hero-enter.d6 { animation-delay: 1.2s; }
+
+@keyframes heroEnter {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── GLYPH WRITE (title letter by letter) ── */
+.glyph-write .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: glyphAppear 0.05s ease forwards;
+}
+
+@keyframes glyphAppear {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── AETHER RINGS ── */
+.aether-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(139,26,26,0.1);
+  pointer-events: none;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ringExpand 8s ease-in-out infinite;
+}
+
+@keyframes ringExpand {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 0.7; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+/* ── BLOOD DRIP line ── */
+@keyframes drip {
+  0%   { height: 0; opacity: 0.8; }
+  80%  { height: 60px; opacity: 0.8; }
+  100% { height: 60px; opacity: 0; }
+}
+
+/* ── SILHOUETTE GLOW PULSE ── */
+@keyframes silhouetteGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(139,26,26,0.3)); }
+  50%       { filter: drop-shadow(0 0 40px rgba(192,57,43,0.5)); }
+}
+
+.silhouette-wrap {
+  animation: silhouetteGlow 4s ease-in-out infinite;
+}
+
+/* ── STAINED GLASS shimmer ── */
+@keyframes glassShimmer {
+  0%, 100% { opacity: 0.035; }
+  50%       { opacity: 0.06; }
+}
+
+.stained-glass {
+  animation: glassShimmer 6s ease-in-out infinite;
+}
+
+/* ── FLOATING PARTICLES ── */
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-100vh) translateX(var(--drift)) scale(0.5); opacity: 0; }
+}
+
+/* ── NAV ACTIVE INDICATOR ── */
+@keyframes navPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(192,57,43,0.3); }
+  50%       { box-shadow: 0 0 16px rgba(192,57,43,0.6); }
+}
+
+/* ── ORNAMENT SPIN (logo) ── */
+@keyframes ornamentSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── LOADING SCREEN ── */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transition: opacity 0.5s ease;
+}
+
+#loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-sigil {
+  width: 80px; height: 80px;
+  animation: loaderSpin 2s linear infinite;
+}
+
+@keyframes loaderSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.loader-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--crimson-2);
+  opacity: 0.6;
+  animation: loaderPulse 1.5s ease infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}
+
+.loader-bar-track {
+  width: 180px; height: 1px;
+  background: var(--border-dim);
+  position: relative;
+  overflow: hidden;
+}
+
+.loader-bar-fill {
+  position: absolute;
+  top: 0; left: 0; height: 100%;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+  animation: loaderFill 1.8s ease forwards;
+}
+
+@keyframes loaderFill {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* ── HOVER GLOW on cards ── */
+.glow-hover {
+  transition: box-shadow var(--transition);
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 30px rgba(139,26,26,0.2), 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* ── SCROLL PROGRESS BAR ── */
+#progress-bar {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--crimson), var(--gold));
+  z-index: 600;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 6px rgba(192,57,43,0.5);
+}
