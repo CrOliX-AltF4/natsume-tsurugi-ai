@@ -337,10 +337,10 @@ const Loader = (() => {
     window.addEventListener('load', () => {
       setTimeout(() => {
         loader.classList.add('hidden');
-        setTimeout(() => loader.remove(), 500);
+        setTimeout(() => loader.remove(), 800);
         // Init core systems
         initCore();
-      }, 1800);
+      }, 3500);
     });
   }
 
