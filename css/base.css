@@ -3,7 +3,6 @@
    Natsume Tsurugi · Code Vein II aesthetic
    ═══════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&display=swap');
 
 :root {
   /* Palette */
@@ -54,7 +53,7 @@
 
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
+
   -webkit-font-smoothing: antialiased;
 }
 
@@ -205,17 +204,6 @@ h3 { font-size: clamp(18px, 2.5vw, 26px); }
   transform: translateY(-100%);
 }
 
-#curtain.down  { animation: curtainDown 0.5s cubic-bezier(0.76,0,0.24,1) forwards; }
-#curtain.up    { animation: curtainUp   0.5s cubic-bezier(0.76,0,0.24,1) forwards; }
-
-@keyframes curtainDown {
-  from { transform: translateY(-100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes curtainUp {
-  from { transform: translateY(0); }
-  to   { transform: translateY(100%); }
-}
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }

@@ -231,12 +231,20 @@ const Pipeline = (() => {
     }, 900);
   }
 
-  return { init };
+  function destroy() {
+    if (interval) { clearInterval(interval); interval = null; }
+  }
+
+  return { init, destroy };
 })();
 
 /* ── CAROUSEL ── */
 const Carousel = (() => {
+  let activeStop = null;
+
   function init(id) {
+    if (activeStop) { activeStop(); activeStop = null; }
+
     const wrap = document.getElementById(id);
     if (!wrap) return;
 
@@ -262,6 +270,7 @@ const Carousel = (() => {
 
     function stopAuto() {
       clearInterval(autoplay);
+      autoplay = null;
     }
 
     if (prev) prev.addEventListener('click', () => { stopAuto(); go(current - 1); startAuto(); });
@@ -279,19 +288,26 @@ const Carousel = (() => {
 
     go(0);
     startAuto();
+    activeStop = stopAuto;
   }
 
-  return { init };
+  function destroy() {
+    if (activeStop) { activeStop(); activeStop = null; }
+  }
+
+  return { init, destroy };
 })();
 
 /* ── MOOD BARS ── */
 const MoodBars = (() => {
-  const targets = [62, 22, 9, 5, 2];
-
   function init() {
     const bars = document.querySelectorAll('.mood-fill');
     const container = document.querySelector('.mood-container');
     if (!container || !bars.length) return;
+
+    // Lit les cibles depuis le DOM (.mood-pct) — source unique de vérité
+    const targets = [...document.querySelectorAll('.mood-pct')]
+      .map(el => parseFloat(el.textContent) || 0);
 
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -334,13 +350,30 @@ const Loader = (() => {
     const loader = document.getElementById('loader');
     if (!loader) return;
 
+    const text   = loader.querySelector('.loader-text');
+    const flames = loader.querySelectorAll('.flame');
+
+    // Text : pulse GSAP (remplace loaderTextFade CSS)
+    gsap.fromTo(text,
+      { opacity: 0.3, y: 0 },
+      { opacity: 0.7, y: -2, duration: 1, ease: 'sine.inOut', yoyo: true, repeat: -1 }
+    );
+
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        loader.classList.add('hidden');
-        setTimeout(() => loader.remove(), 800);
-        // Init core systems
-        initCore();
-      }, 3500);
+      // Dernière bougie allumée à : --i:3 × 0.8s delay + 0.8s anim = 3.2s
+      gsap.delayedCall(3.2, () => {
+        const tl = gsap.timeline({
+          onComplete: () => { loader.remove(); initCore(); }
+        });
+
+        // Extinction des flammes une par une (opacity seule — pas de conflit transform CSS)
+        flames.forEach((flame, i) => {
+          tl.to(flame, { opacity: 0, duration: 0.25, ease: 'power2.in' }, i * 0.2);
+        });
+
+        // Fade du loader complet
+        tl.to(loader, { opacity: 0, duration: 0.8, ease: 'power2.inOut' }, '+=0.1');
+      });
     });
   }
 

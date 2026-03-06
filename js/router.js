@@ -5,6 +5,7 @@
 
 const Router = (() => {
   let current = null;
+  let navigating = false;
   const curtain = document.getElementById('curtain');
   const app = document.getElementById('app');
   const cache = {}; // Store loaded HTML sections
@@ -52,48 +53,50 @@ const Router = (() => {
   async function navigate(id, pushState = true) {
     if (current === id) return;
     if (!sceneIds.includes(id)) return;
+    if (navigating) return;
+    navigating = true;
 
-    // Curtain down
-    curtain.classList.remove('up');
-    curtain.classList.add('down');
+    // Stoppe les animations de scène en cours
+    if (current === 'system') Pipeline.destroy();
+    if (current === 'gallery') Carousel.destroy();
 
-    // Preload
-    const newSection = await loadScene(id);
-    if (!newSection) {
-      curtain.classList.remove('down');
-      curtain.classList.add('up');
-      return;
-    }
+    // Tue les tweens curtain en cours + reset position
+    gsap.killTweensOf(curtain);
+    gsap.set(curtain, { y: '-100%' });
 
-    setTimeout(() => {
-      // Remove current section from DOM but keep in cache
-      app.innerHTML = '';
+    // Fetch + curtain down en parallèle
+    const sectionPromise = loadScene(id);
+    gsap.to(curtain, {
+      y: '0%',
+      duration: 0.48,
+      ease: 'power2.inOut',
+      onComplete: async () => {
+        const newSection = await sectionPromise;
+        if (!newSection) {
+          gsap.to(curtain, { y: '-100%', duration: 0.48, ease: 'power2.inOut',
+            onComplete: () => { navigating = false; } });
+          return;
+        }
 
-      // Add new section
-      app.appendChild(newSection);
+        app.innerHTML = '';
+        app.appendChild(newSection);
 
-      // Trigger activation
-      requestAnimationFrame(() => {
-        newSection.classList.add('active');
-        newSection.scrollTop = 0;
-        
-        // Init scroll progress for the new scene
-        ProgressBar.initForScene(newSection);
-        
-        // Curtain up
-        curtain.classList.remove('down');
-        curtain.classList.add('up');
+        requestAnimationFrame(() => {
+          newSection.classList.add('active');
+          newSection.scrollTop = 0;
+          ProgressBar.initForScene(newSection);
 
-        // Update state
-        current = id;
-        updateNav(id);
-        if (pushState) history.pushState({ scene: id }, '', `#${id}`);
+          current = id;
+          updateNav(id);
+          if (pushState) history.pushState({ scene: id }, '', `#${id}`);
+          triggerReveal(newSection);
 
-        // Trigger reveals and specific inits
-        triggerReveal(newSection);
-      });
-
-    }, 480);
+          // Curtain up (sort par le bas)
+          gsap.to(curtain, { y: '100%', duration: 0.48, ease: 'power2.inOut',
+            onComplete: () => { navigating = false; } });
+        });
+      }
+    });
   }
 
   function init() {

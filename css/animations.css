@@ -150,18 +150,13 @@
   align-items: center;
   justify-content: center;
   gap: 60px;
-  transition: opacity 0.8s ease;
-}
-
-#loader.hidden {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .candles-container {
   display: flex;
   gap: 48px;
   align-items: flex-end;
+  padding-bottom: 12px;
 }
 
 .candle {
@@ -175,10 +170,30 @@
 /* Wax Body - Melted & Irregular */
 .wax {
   width: 100%;
-  background: linear-gradient(to right, #1a1a1a, #333 20%, #444 50%, #222 80%, #111 100%);
+  background: linear-gradient(to right,
+    #150303,
+    #2e0707 20%,
+    #3a0808 50%,
+    #220505 80%,
+    #0f0202 100%
+  );
   border-radius: 4px 4px 2px 2px;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+  box-shadow:
+    inset 0 2px 10px rgba(0,0,0,0.8),
+    inset 2px 0 6px rgba(0,0,0,0.4),
+    inset -2px 0 6px rgba(0,0,0,0.4);
   position: relative;
+}
+
+/* Halo chaud de la flamme sur le dessus de la cire */
+.wax::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(200, 80, 0, 0.14), transparent);
+  border-radius: 4px 4px 0 0;
+  pointer-events: none;
 }
 
 /* Common drip style */
@@ -187,9 +202,12 @@
   position: absolute;
   top: 10px;
   width: 4px;
-  background: #2a2a2a;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  background: linear-gradient(to bottom, #2a0606, #1a0404);
+  border-radius: 0 0 6px 6px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+  transform-origin: top center;
+  transform: scaleY(0);
+  animation: waxDrip calc(var(--i) * 0.6s + 1.2s) ease-out calc(var(--i) * 0.8s + 1s) forwards;
 }
 
 /* Unique Candle Adjustments - Vertical but varied */
@@ -214,6 +232,27 @@
 }
 .candle:nth-child(3) .wax::after { right: 3px; height: 40px; top: 18px; width: 3px; }
 
+/* Socle / chandelier */
+.candle::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 14px);
+  height: 10px;
+  background: linear-gradient(to bottom, #2a2a2a, #141414);
+  border-radius: 3px 3px 2px 2px;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+@keyframes waxDrip {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
 /* Wick & Flame Alignment */
 .wick {
   width: 2px;
@@ -230,18 +269,46 @@
   top: -38px;
   left: var(--peak);
   width: 14px;
-  height: 28px;
-  background: radial-gradient(ellipse at bottom, #fff 0%, #f0ebdb 20%, #ff8000 50%, #8b1a1a 100%);
-  border-radius: 50% 50% 20% 20%;
-  filter: blur(0.5px);
-  box-shadow: 0 0 30px rgba(139, 26, 26, 0.7);
+  height: 30px;
+  background: radial-gradient(ellipse at 45% 70%,
+    #fff8e1 0%,
+    #ffcc00 18%,
+    #ff6600 48%,
+    rgba(180, 30, 10, 0.55) 78%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  filter: url(#flame-filter) blur(0.4px);
+  box-shadow:
+    0 0 12px rgba(255, 120, 0, 0.6),
+    0 0 28px rgba(200, 60, 0, 0.3),
+    0 0 6px  rgba(255, 220, 100, 0.4);
   opacity: 0;
   transform: translateX(-50%) scale(0);
   transform-origin: bottom center;
-  animation: 
+  animation:
     candleFlicker 1.5s infinite alternate,
     candleIgnite 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   animation-delay: 0s, calc(var(--i) * 0.8s);
+}
+
+/* Cœur lumineux de la flamme */
+.flame::before {
+  content: '';
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 42%;
+  background: radial-gradient(ellipse at center,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 240, 160, 0.65) 45%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(1px);
+  pointer-events: none;
 }
 
 @keyframes candleIgnite {
@@ -263,14 +330,8 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--ivory);
-  opacity: 0.6;
+  opacity: 0.3;
   text-shadow: 0 0 15px var(--crimson-glow);
-  animation: loaderTextFade 2s ease-in-out infinite;
-}
-
-@keyframes loaderTextFade {
-  0%, 100% { opacity: 0.3; transform: translateY(0); }
-  50%       { opacity: 0.7; transform: translateY(-2px); }
 }
 
 /* ── HOVER GLOW on cards ── */
