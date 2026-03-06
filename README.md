@@ -82,4 +82,5 @@ Search and replace `v0.4.0` in `index.html`.
 
 ## License
 
-© 2025 CrOliX-AltF4 — All rights reserved.
+© 2026 Natsume Tsurugi AI
+Site code released under MIT License
