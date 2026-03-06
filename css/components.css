@@ -179,7 +179,7 @@
 
 /* ── FORGED CARD ── */
 .card {
-  background: var(--black-card);
+  background: linear-gradient(145deg, #1c0e04 0%, #100800 50%, #180c04 100%);
   border: 1px solid var(--border-gold);
   position: relative;
   overflow: hidden;
@@ -191,13 +191,13 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--crimson), transparent);
+  background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
   opacity: 0;
   transition: opacity var(--transition);
 }
 
 .card:hover {
-  border-color: var(--border-crimson);
+  border-color: rgba(196,160,82,0.55);
   transform: translateY(-2px);
 }
 
@@ -205,26 +205,54 @@
   opacity: 1;
 }
 
-/* Corner ornaments */
+/* Corner ornaments — CV2 style */
 .card-frame {
   position: absolute; inset: 0;
   pointer-events: none;
+  overflow: visible;
 }
 
 .card-frame::before, .card-frame::after,
 .card-frame-b::before, .card-frame-b::after {
   content: '';
   position: absolute;
-  width: 12px; height: 12px;
-  border-color: var(--gold);
+  width: 16px; height: 16px;
+  border-color: var(--gold-bright);
   border-style: solid;
-  opacity: 0.35;
+  opacity: 0.65;
 }
 
-.card-frame::before  { top: 6px; left: 6px;  border-width: 1px 0 0 1px; }
-.card-frame::after   { top: 6px; right: 6px; border-width: 1px 1px 0 0; }
-.card-frame-b::before{ bottom: 6px; left: 6px;  border-width: 0 0 1px 1px; }
-.card-frame-b::after { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; }
+.card-frame::before  { top: 6px;    left: 6px;   border-width: 1.5px 0 0 1.5px; }
+.card-frame::after   { top: 6px;    right: 6px;  border-width: 1.5px 1.5px 0 0; }
+.card-frame-b::before{ bottom: 6px; left: 6px;   border-width: 0 0 1.5px 1.5px; }
+.card-frame-b::after { bottom: 6px; right: 6px;  border-width: 0 1.5px 1.5px 0; }
+
+/* ── CV SEPARATOR ─── ◆ ─── */
+.cv-sep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 14px;
+  color: var(--gold);
+  opacity: 0.45;
+}
+
+.cv-sep::before,
+.cv-sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,160,82,0.5));
+}
+
+.cv-sep::after {
+  background: linear-gradient(90deg, rgba(196,160,82,0.5), transparent);
+}
+
+.cv-sep-diamond {
+  font-size: 6px;
+  line-height: 1;
+}
 
 /* ── QUEST SCROLL (tech section) ── */
 .quest-scroll {
