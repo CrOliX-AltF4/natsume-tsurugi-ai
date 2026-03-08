@@ -19,10 +19,11 @@
               <div class="pipe-row"><div class="pipe-icon done" id="pdot-0"></div><span class="pipe-name done" id="pname-0">Speech Capture</span><span class="pipe-time done" id="ptime-0">+0ms</span></div>
               <div class="pipe-row"><div class="pipe-icon done" id="pdot-1"></div><span class="pipe-name done" id="pname-1">Wake Word</span><span class="pipe-time done" id="ptime-1">+120ms</span></div>
               <div class="pipe-row"><div class="pipe-icon active" id="pdot-2"></div><span class="pipe-name active" id="pname-2">LLM Stream</span><span class="pipe-time active" id="ptime-2">+380ms</span></div>
-              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-3"></div><span class="pipe-name idle" id="pname-3">Sentence Split</span><span class="pipe-time idle" id="ptime-3">—</span></div>
-              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-4"></div><span class="pipe-name idle" id="pname-4">SSML + TTS</span><span class="pipe-time idle" id="ptime-4">—</span></div>
-              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-5"></div><span class="pipe-name idle" id="pname-5">RVC Voice</span><span class="pipe-time idle" id="ptime-5">—</span></div>
-              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-6"></div><span class="pipe-name idle" id="pname-6">Lip-sync · Avatar</span><span class="pipe-time idle" id="ptime-6">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-3"></div><span class="pipe-name idle" id="pname-3">Action Dispatch</span><span class="pipe-time idle" id="ptime-3">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-4"></div><span class="pipe-name idle" id="pname-4">Sentence Split</span><span class="pipe-time idle" id="ptime-4">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-5"></div><span class="pipe-name idle" id="pname-5">SSML + TTS</span><span class="pipe-time idle" id="ptime-5">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-6"></div><span class="pipe-name idle" id="pname-6">RVC Voice</span><span class="pipe-time idle" id="ptime-6">—</span></div>
+              <div class="pipe-row"><div class="pipe-icon idle" id="pdot-7"></div><span class="pipe-name idle" id="pname-7">Lip-sync · Avatar</span><span class="pipe-time idle" id="ptime-7">—</span></div>
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@
           <div style="background:var(--black-card);padding:20px;">
             <div style="font-family:var(--font-display);font-size:22px;color:var(--gold);margin-bottom:8px;">I</div>
             <div style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ivory);margin-bottom:6px;">Game Hook</div>
-            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ivory-faint);line-height:1.6;">FF14 ACT · Zone / HP / Combat · WebSocket</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--ivory-faint);line-height:1.6;">FF14 ACT · Zone / HP / Combat · WebSocket<br>CV2 Hook · Pixel sampling · HP / Ichor / Boss</div>
             <div style="margin-top:12px;font-family:var(--font-mono);font-size:8px;color:var(--gold);letter-spacing:0.2em;border:1px solid var(--gold-dim);padding:2px 8px;display:inline-block;">FREE</div>
           </div>
           <div style="background:var(--black-card);padding:20px;">
@@ -86,13 +87,15 @@
     <div class="label reveal" style="margin-bottom:16px;">The Forge</div>
     <div class="tech-grid reveal d1">
       <div class="tech-cell"><div class="tech-domain">Runtime</div><div class="tech-name">Node.js 24</div><div class="tech-sub">TypeScript 5.x · Strict</div></div>
-      <div class="tech-cell"><div class="tech-domain">Language Model</div><div class="tech-name">GPT-4o-mini</div><div class="tech-sub">OpenAI · Groq · Ollama</div></div>
+      <div class="tech-cell"><div class="tech-domain">Language Model</div><div class="tech-name">LLM Factory</div><div class="tech-sub">OpenAI · Groq · DeepSeek · Ollama</div></div>
       <div class="tech-cell"><div class="tech-domain">Voice Synthesis</div><div class="tech-name">Edge TTS</div><div class="tech-sub">AriaNeural · SSML · RVC</div></div>
       <div class="tech-cell"><div class="tech-domain">Transcription</div><div class="tech-name">Whisper</div><div class="tech-sub">Groq cloud · Local</div></div>
       <div class="tech-cell"><div class="tech-domain">Vision</div><div class="tech-name">GPT-4o</div><div class="tech-sub">detail:low · $0.00011/img</div></div>
       <div class="tech-cell"><div class="tech-domain">Avatar</div><div class="tech-name">VTube Studio</div><div class="tech-sub">WebSocket · Live2D · PCM</div></div>
       <div class="tech-cell"><div class="tech-domain">Game Data</div><div class="tech-name">ACT WS</div><div class="tech-sub">FF XIV · CombatData</div></div>
       <div class="tech-cell"><div class="tech-domain">Communication</div><div class="tech-name">Discord.js</div><div class="tech-sub">Multi-speaker · LTM</div></div>
+      <div class="tech-cell"><div class="tech-domain">Input Control</div><div class="tech-name">keysender</div><div class="tech-sub">Windows SendInput · FF14 · MC · Osu!</div></div>
+      <div class="tech-cell"><div class="tech-domain">Quality</div><div class="tech-name">Vitest</div><div class="tech-sub">60+ tests · GitHub Actions CI</div></div>
     </div>
 
   </div>
