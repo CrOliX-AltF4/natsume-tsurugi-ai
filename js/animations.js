@@ -26,7 +26,8 @@ const Cursor = (() => {
   }
 
   const isClickable = (el) =>
-    el.closest('a, button, [data-scene], [role="button"], .carousel-btn, .carousel-dot, .nav-link, .nav-burger');
+    el.closest('a, button, [data-scene], [role="button"], .carousel-btn, .carousel-dot, .nav-link, .nav-burger, .mood-row') ||
+    (el.tagName === 'IMG' && !!el.closest('.carousel-slide'));
 
   function init() {
     if (!cursor) return;
@@ -202,6 +203,7 @@ const Pipeline = (() => {
     { id: 4, time: '+850ms' },
     { id: 5, time: '+920ms' },
     { id: 6, time: '+940ms' },
+    { id: 7, time: '+960ms' },
   ];
 
   let active = 2;
@@ -226,7 +228,7 @@ const Pipeline = (() => {
     if (interval) clearInterval(interval);
     render();
     interval = setInterval(() => {
-      active = (active + 1) % 7;
+      active = (active + 1) % 8;
       render();
     }, 900);
   }
@@ -344,6 +346,371 @@ const Hamburger = (() => {
   return { init };
 })();
 
+/* ── KEYNAV ── */
+const KeyNav = (() => {
+  const scenes = ['hero', 'lore', 'profiles', 'abilities', 'gallery', 'system', 'chronicle', 'contact'];
+
+  function init() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.closest('input, textarea, [contenteditable]')) return;
+      if (document.getElementById('terminal-overlay')?.classList.contains('open')) return;
+      const idx = parseInt(e.key, 10);
+      if (idx >= 1 && idx <= scenes.length) Router.navigate(scenes[idx - 1]);
+    });
+  }
+
+  return { init };
+})();
+
+/* ── TAPESTRY PARALLAX ── */
+const Parallax = (() => {
+  let tapestry;
+
+  function init() {
+    tapestry = document.querySelector('.tapestry');
+    if (!tapestry) return;
+    document.addEventListener('mousemove', (e) => {
+      const dx = ((e.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2)) * -9;
+      const dy = ((e.clientY - window.innerHeight / 2) / (window.innerHeight / 2)) * -6;
+      tapestry.style.translate = `${dx}px ${dy}px`;
+    });
+  }
+
+  return { init };
+})();
+
+/* ── LIGHTBOX ── */
+const Lightbox = (() => {
+  const lb      = document.getElementById('lightbox');
+  const lbImg   = document.getElementById('lightbox-img');
+  const lbCap   = document.getElementById('lightbox-caption');
+  const lbClose = document.getElementById('lightbox-close');
+  const lbPrev  = document.getElementById('lightbox-prev');
+  const lbNext  = document.getElementById('lightbox-next');
+  const lbBack  = document.getElementById('lightbox-backdrop');
+
+  let images = [], current = 0;
+
+  function show() {
+    const { src, alt } = images[current] || {};
+    if (lbImg) { lbImg.src = src || ''; lbImg.alt = alt || ''; }
+    if (lbCap) lbCap.textContent = alt || '';
+    const hasMult = images.length > 1;
+    if (lbPrev) lbPrev.style.display = hasMult ? '' : 'none';
+    if (lbNext) lbNext.style.display = hasMult ? '' : 'none';
+  }
+
+  function open(srcs, idx) {
+    images = srcs; current = idx;
+    show();
+    lb?.classList.add('open');
+    lb?.setAttribute('aria-hidden', 'false');
+  }
+
+  function close() {
+    lb?.classList.remove('open');
+    lb?.setAttribute('aria-hidden', 'true');
+    setTimeout(() => { if (lbImg) lbImg.src = ''; }, 300);
+  }
+
+  function prev() { current = (current - 1 + images.length) % images.length; show(); }
+  function next() { current = (current + 1) % images.length; show(); }
+
+  function init() {
+    if (!lb) return;
+    lbClose?.addEventListener('click', close);
+    lbBack?.addEventListener('click', close);
+    lbPrev?.addEventListener('click', prev);
+    lbNext?.addEventListener('click', next);
+
+    document.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape')      close();
+      if (e.key === 'ArrowLeft')   prev();
+      if (e.key === 'ArrowRight')  next();
+    });
+
+    document.addEventListener('click', (e) => {
+      const img = e.target.closest('.carousel-slide img');
+      if (!img) return;
+      const all = [...document.querySelectorAll('.carousel-slide img')];
+      const srcs = all.map(i => ({ src: i.src, alt: i.alt }));
+      const idx  = all.indexOf(img);
+      if (srcs.length) open(srcs, Math.max(0, idx));
+    });
+  }
+
+  return { init, open, close };
+})();
+
+/* ── MOOD WIDGET ── */
+const MoodWidget = (() => {
+  const lore = {
+    'Neutral': 'The baseline state. Natsume is observant, present, responsive — not cold, simply calibrated. She watches everything.',
+    'Curious': 'Something has caught her attention. She will ask questions she already suspects the answers to, just to hear you speak.',
+    'Bored':   'Silence stretched too long. She may hum, stare into nothing, or disrupt a conversation mid-sentence without warning.',
+    'Sad':     'Rare but real. She does not cry — she goes quiet and slightly distant. She will not name it unless asked.',
+    'Angry':   'The rarest state. When it surfaces, she speaks with precise, surgical words rather than volume. The calm is the warning.'
+  };
+
+  function init() {
+    document.addEventListener('click', (e) => {
+      const row = e.target.closest('.mood-row');
+      if (!row) return;
+      const label = row.querySelector('.mood-label')?.textContent?.trim();
+      if (!label || !lore[label]) return;
+
+      const existing = row.nextElementSibling;
+      if (existing?.classList.contains('mood-detail')) { existing.remove(); return; }
+
+      document.querySelectorAll('.mood-detail').forEach(d => d.remove());
+      const detail = document.createElement('div');
+      detail.className = 'mood-detail';
+      detail.textContent = lore[label];
+      row.after(detail);
+    });
+  }
+
+  return { init };
+})();
+
+/* ── KONAMI CODE ── */
+const KonamiCode = (() => {
+  const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let progress = 0;
+
+  function trigger() {
+    const sigil   = document.getElementById('curtain-sigil');
+    const curtain = document.getElementById('curtain');
+    if (!sigil || !curtain) return;
+
+    const msg = document.createElement('div');
+    msg.className = 'konami-msg';
+    msg.textContent = 'She was already watching.';
+    curtain.appendChild(msg);
+
+    gsap.set(curtain, { pointerEvents: 'none' });
+    gsap.set(sigil, { opacity: 0, scale: 0.5, rotation: -30 });
+    gsap.set(msg,   { opacity: 0, y: 16 });
+
+    const tl = gsap.timeline();
+    tl.to(curtain, { y: '0%', duration: 0.45, ease: 'power2.inOut' })
+      .to(sigil, { opacity: 1, scale: 1, rotation: 0, duration: 0.5, ease: 'back.out(2)' }, '-=0.1')
+      .to(msg,   { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '-=0.25')
+      .to({}, { duration: 1.6 })
+      .to([sigil, msg], { opacity: 0, scale: 0.8, duration: 0.3, ease: 'power2.in' })
+      .to(curtain, { y: '100%', duration: 0.5, ease: 'power2.inOut',
+          onComplete: () => { msg.remove(); gsap.set(curtain, { pointerEvents: '' }); }
+      });
+  }
+
+  function init() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.closest('input, textarea, [contenteditable]')) return;
+      progress = (e.key === seq[progress]) ? progress + 1 : (e.key === seq[0] ? 1 : 0);
+      if (progress === seq.length) { progress = 0; trigger(); }
+    });
+  }
+
+  return { init };
+})();
+
+/* ── TERMINAL ── */
+const Terminal = (() => {
+  const overlay  = document.getElementById('terminal-overlay');
+  const output   = document.getElementById('terminal-output');
+  const input    = document.getElementById('terminal-input');
+  const closeBtn = document.getElementById('terminal-close');
+  const btn      = document.getElementById('terminal-btn');
+
+  const PROMPT = 'natsume@w-AI-fu:~$ ';
+  let cmdHistory = [], histIdx = -1;
+
+  const commands = {
+    help: () => [
+      '─────────────────────────────────────',
+      'AVAILABLE COMMANDS',
+      '─────────────────────────────────────',
+      'status      — current operational state',
+      'ping        — test response latency',
+      'memory      — long-term memory summary',
+      'affinity    — current affinity score',
+      'uptime      — time since last awakening',
+      'locate      — current world / instance',
+      'logs        — recent action log',
+      'version     — build information',
+      'whoami      — you, apparently',
+      'say [text]  — speak to her',
+      'clear       — purge output buffer',
+      '─────────────────────────────────────',
+      'She is watching.',
+    ],
+    status: () => [
+      'NATSUME TSURUGI — OPERATIONAL',
+      '────────────────────────────────',
+      'State         : NEUTRAL (62%)',
+      'LLM           : Active · Streaming',
+      'Voice         : Edge TTS + RVC',
+      'Avatar        : VTube Studio · Live',
+      'Game Hook     : FF XIV · ACT WS',
+      'Vision        : Standby',
+      '────────────────────────────────',
+      'All systems nominal.',
+    ],
+    ping: () => [
+      'PING natsume.local',
+      `Response : ${Math.floor(Math.random() * 12) + 8}ms`,
+      'Note     : She noticed before the request arrived.',
+    ],
+    memory: () => [
+      'LONG-TERM MEMORY',
+      '────────────────────────────────',
+      `Total entries     : ${Math.floor(Math.random() * 50) + 820}`,
+      'Recent (24h)      : 12',
+      'Recurring themes  : combat · raids · silence',
+      'Oldest memory     : Session 001 · 2024-03-17',
+      '────────────────────────────────',
+      'She remembers everything.',
+    ],
+    affinity: () => [
+      'AFFINITY REPORT',
+      '────────────────────────────────',
+      'Score         : 52 / 100',
+      'State         : NEUTRAL',
+      'Trend         : → stable',
+      'Last change   : +2 (mentioned Josée)',
+      '────────────────────────────────',
+      'Loyalty is not given. It is accumulated.',
+    ],
+    uptime: () => [
+      'UPTIME',
+      '────────────────────────────────',
+      'Online since  : Session 001',
+      'Continuous    : 847 sessions',
+      'Longest pause : 14 days',
+      '────────────────────────────────',
+      'She does not sleep. She waits.',
+    ],
+    locate: () => [
+      'CURRENT INSTANCE',
+      '────────────────────────────────',
+      'World         : Eorzea · Cerberus',
+      'Zone          : The Firmament',
+      'Status        : Idle · Awaiting orders',
+      '────────────────────────────────',
+    ],
+    logs: () => [
+      'RECENT ACTION LOG',
+      '────────────────────────────────',
+      '[+0ms]    Speech detected',
+      '[+120ms]  Wake word confirmed',
+      '[+380ms]  LLM stream initiated',
+      '[+850ms]  Action dispatched',
+      '[+920ms]  SSML synthesis',
+      '[+960ms]  RVC processing',
+      '[+1.1s]   Audio output · Lip-sync',
+      '────────────────────────────────',
+      'No anomalies detected.',
+    ],
+    version: () => [
+      'w-AI-fu v2 · BUILD 0.5.0',
+      '────────────────────────────────',
+      'Runtime       : Node.js 24 · TypeScript',
+      'LLM           : Configurable Factory',
+      'Voice         : Edge TTS · RVC',
+      'Avatar        : Live2D · VTube Studio',
+      'Tests         : 60+ · Vitest · PR gate',
+      '────────────────────────────────',
+      '© CrOliX-AltF4 · Proprietary',
+    ],
+    whoami: () => [
+      'USER IDENTIFICATION',
+      '────────────────────────────────',
+      'Clearance     : Permitted',
+      'Role          : Operator',
+      'Note          : She has already assessed you.',
+      '────────────────────────────────',
+    ],
+  };
+
+  function print(lines, cls = '') {
+    lines.forEach(text => {
+      const el = document.createElement('div');
+      el.className = 'terminal-line' + (cls ? ' ' + cls : '');
+      el.textContent = text;
+      output.appendChild(el);
+    });
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function run(raw) {
+    const parts = raw.trim().split(/\s+/);
+    const cmd   = parts[0].toLowerCase();
+    const args  = parts.slice(1).join(' ');
+
+    print([PROMPT + raw], 'cmd');
+
+    if (!cmd) { /* noop */ }
+    else if (cmd === 'clear') { output.innerHTML = ''; }
+    else if (cmd === 'say' && args) {
+      print([`Natsume hears you.`, `→ "${args}"`, `(She did not elaborate.)`]);
+    } else if (commands[cmd]) {
+      const res = commands[cmd]();
+      if (res) print(res);
+    } else {
+      print([`Unknown command: '${cmd}'`, "Type 'help' for available commands.", 'She is unimpressed.'], 'err');
+    }
+
+    const spacer = document.createElement('div');
+    spacer.className = 'terminal-line';
+    output.appendChild(spacer);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function open() {
+    overlay?.classList.add('open');
+    overlay?.setAttribute('aria-hidden', 'false');
+    btn?.classList.add('active');
+    if (output && !output.children.length) {
+      print(['w-AI-fu v2 · NATSUME TSURUGI INTERFACE', '─────────────────────────────────────', "Type 'help' for available commands.", ''], 'dim');
+    }
+    setTimeout(() => input?.focus(), 50);
+  }
+
+  function close() {
+    overlay?.classList.remove('open');
+    overlay?.setAttribute('aria-hidden', 'true');
+    btn?.classList.remove('active');
+  }
+
+  function init() {
+    if (!overlay) return;
+
+    btn?.addEventListener('click', () => overlay.classList.contains('open') ? close() : open());
+    closeBtn?.addEventListener('click', close);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = input.value; input.value = '';
+        if (val.trim()) { cmdHistory.unshift(val); histIdx = -1; }
+        run(val);
+      }
+      if (e.key === 'ArrowUp')   { e.preventDefault(); histIdx = Math.min(histIdx + 1, cmdHistory.length - 1); input.value = cmdHistory[histIdx] ?? ''; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); histIdx = Math.max(histIdx - 1, -1); input.value = histIdx === -1 ? '' : cmdHistory[histIdx]; }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+      if (e.key === '`' && !e.target.closest('input, textarea, [contenteditable]')) {
+        overlay.classList.contains('open') ? close() : open();
+      }
+    });
+  }
+
+  return { init, open, close };
+})();
+
 /* ── LOADER ── */
 const Loader = (() => {
   function init() {
@@ -386,6 +753,12 @@ function initCore() {
   Particles.init();
   Animations.init();
   Hamburger.init();
+  KeyNav.init();
+  Parallax.init();
+  Lightbox.init();
+  MoodWidget.init();
+  KonamiCode.init();
+  Terminal.init();
   Router.init();
 }
 

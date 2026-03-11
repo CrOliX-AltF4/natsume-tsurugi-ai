@@ -10,7 +10,7 @@ const Router = (() => {
   const app = document.getElementById('app');
   const cache = {}; // Store loaded HTML sections
 
-  const sceneIds = ['hero', 'lore', 'abilities', 'gallery', 'system', 'chronicle', 'contact'];
+  const sceneIds = ['hero', 'lore', 'profiles', 'abilities', 'gallery', 'system', 'chronicle', 'contact'];
 
   function updateNav(id) {
     document.querySelectorAll('.nav-link').forEach(el => {
@@ -56,23 +56,56 @@ const Router = (() => {
     if (navigating) return;
     navigating = true;
 
+    const isInitial = current === null;
+    const sigil = document.getElementById('curtain-sigil');
+
     // Stoppe les animations de scène en cours
     if (current === 'system') Pipeline.destroy();
     if (current === 'gallery') Carousel.destroy();
 
-    // Tue les tweens curtain en cours + reset position
+    if (isInitial) {
+      // Premier chargement : le rideau couvre déjà l'écran (y:0% en CSS)
+      // On charge la section puis on lève le rideau directement
+      const newSection = await loadScene(id);
+      if (!newSection) { navigating = false; return; }
+
+      app.innerHTML = '';
+      app.appendChild(newSection);
+
+      requestAnimationFrame(() => {
+        newSection.classList.add('active');
+        newSection.scrollTop = 0;
+        ProgressBar.initForScene(newSection);
+
+        current = id;
+        updateNav(id);
+        if (pushState) history.pushState({ scene: id }, '', `#${id}`);
+        triggerReveal(newSection);
+
+        gsap.to(curtain, { y: '100%', duration: 0.55, ease: 'power2.inOut',
+          onComplete: () => { navigating = false; } });
+      });
+      return;
+    }
+
+    // Navigation normale : rideau descend → swap → rideau monte
     gsap.killTweensOf(curtain);
     gsap.set(curtain, { y: '-100%' });
+    if (sigil) gsap.set(sigil, { opacity: 0, scale: 0.5, rotation: -20 });
 
-    // Fetch + curtain down en parallèle
     const sectionPromise = loadScene(id);
     gsap.to(curtain, {
       y: '0%',
       duration: 0.48,
       ease: 'power2.inOut',
+      onStart: () => {
+        if (sigil) gsap.to(sigil, { opacity: 1, scale: 1, rotation: 0,
+          duration: 0.35, delay: 0.1, ease: 'power2.out' });
+      },
       onComplete: async () => {
         const newSection = await sectionPromise;
         if (!newSection) {
+          if (sigil) gsap.to(sigil, { opacity: 0, scale: 0.5, rotation: 20, duration: 0.2 });
           gsap.to(curtain, { y: '-100%', duration: 0.48, ease: 'power2.inOut',
             onComplete: () => { navigating = false; } });
           return;
@@ -93,6 +126,9 @@ const Router = (() => {
 
           // Curtain up (sort par le bas)
           gsap.to(curtain, { y: '100%', duration: 0.48, ease: 'power2.inOut',
+            onStart: () => {
+              if (sigil) gsap.to(sigil, { opacity: 0, scale: 0.5, rotation: 20, duration: 0.25 });
+            },
             onComplete: () => { navigating = false; } });
         });
       }
@@ -100,16 +136,14 @@ const Router = (() => {
   }
 
   function init() {
-    // Nav links
-    document.querySelectorAll('[data-scene]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = el.dataset.scene;
-        navigate(id);
-        // Close mobile menu
-        document.getElementById('mobile-menu')?.classList.remove('open');
-        document.getElementById('nav-burger')?.classList.remove('open');
-      });
+    // Nav links — event delegation to catch dynamically loaded sections
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-scene]');
+      if (!el) return;
+      e.preventDefault();
+      navigate(el.dataset.scene);
+      document.getElementById('mobile-menu')?.classList.remove('open');
+      document.getElementById('nav-burger')?.classList.remove('open');
     });
 
     // Handle back/forward

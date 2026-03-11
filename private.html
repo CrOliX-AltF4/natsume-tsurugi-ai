@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Denied — w-AI-fu v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Crimson+Pro:ital,wght@0,300;0,400;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:     #080608;
+    --crimson:   #8B1A1A;
+    --crimson-2: #C0392B;
+    --gold:      #9A7B3F;
+    --gold-dim:  rgba(154,123,63,0.2);
+    --ivory:     #F2EBD9;
+    --ivory-dim: rgba(242,235,217,0.6);
+    --ivory-faint: rgba(242,235,217,0.25);
+    --border-gold: rgba(154,123,63,0.3);
+    --border-crimson: rgba(139,26,26,0.4);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--black);
+    color: var(--ivory);
+    font-family: 'Crimson Pro', Georgia, serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(139,26,26,0.1) 75%, rgba(8,6,8,0.7) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 560px;
+    padding: 24px;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .seal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid rgba(154,123,63,0.35);
+    box-shadow: 0 0 24px rgba(139,26,26,0.2), inset 0 0 20px rgba(139,26,26,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+
+  .seal::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(154,123,63,0.15);
+  }
+
+  .seal-glyph {
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 28px;
+    color: var(--gold);
+    text-shadow: 0 0 16px rgba(154,123,63,0.4);
+  }
+
+  .access-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--crimson-2);
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-family: 'Uncial Antiqua', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 400;
+    color: var(--ivory);
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    color: var(--crimson-2);
+    font-style: normal;
+  }
+
+  .message {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ivory-dim);
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .sub-message {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ivory-faint);
+    margin-bottom: 40px;
+  }
+
+  .panel {
+    border: 1px solid var(--border-gold);
+    background: rgba(20,11,11,0.8);
+    padding: 20px 28px;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196,160,82,0.4), transparent);
+  }
+
+  .panel-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(242,235,217,0.05);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  .panel-row:last-child { border-bottom: none; }
+  .panel-key { color: var(--ivory-faint); letter-spacing: 0.2em; }
+  .panel-val { color: var(--crimson-2); letter-spacing: 0.1em; }
+  .panel-val.gold { color: var(--gold); }
+
+  .back-btn {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 13px 32px;
+    border: 1px solid var(--border-crimson);
+    color: var(--ivory-dim);
+    background: transparent;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.35s, border-color 0.35s;
+    cursor: pointer;
+  }
+
+  .back-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(139,26,26,0.12);
+    transform: translateX(-105%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .back-btn:hover { color: var(--ivory); border-color: var(--crimson-2); }
+  .back-btn:hover::before { transform: translateX(0); }
+
+  .footer-rune {
+    margin-top: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--ivory-faint);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="seal">
+      <span class="seal-glyph">✦</span>
+    </div>
+
+    <div class="access-label">Clearance Level — Insufficient</div>
+
+    <h1>Nothing to <em>See</em> Here</h1>
+
+    <p class="message">
+      This repository is sealed. Like a Lost wandering the Ruined City,<br>
+      you have strayed somewhere you were not meant to go.
+    </p>
+    <p class="sub-message">The source code is watching you. Quietly.</p>
+
+    <div class="panel">
+      <div class="panel-row">
+        <span class="panel-key">Repo Status</span>
+        <span class="panel-val">PRIVATE · ACCESS DENIED</span>
+      </div>
+      <div class="panel-row">
+        <span class="panel-key">Reason</span>
+        <span class="panel-val">Classified by order of CrOliχ</span>
+      </div>
+      <div class="panel-row">
+        <span class="panel-key">Available Via</span>
+        <span class="panel-val gold">Discord · 4nne_0nyme</span>
+      </div>
+      <div class="panel-row">
+        <span class="panel-key">Threat Level</span>
+        <span class="panel-val">Natsume is aware of this visit</span>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-btn">← Return to Safety</a>
+
+    <div class="footer-rune">w-AI-fu v2 · © CrOliX-AltF4 · Proprietary</div>
+
+  </div>
+</body>
+</html>

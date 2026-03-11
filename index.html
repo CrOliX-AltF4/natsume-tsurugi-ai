@@ -64,7 +64,12 @@
 <div class="vignette"></div>
 <div class="tapestry"></div>
 <canvas id="particles"></canvas>
-<div id="curtain"></div>
+<div id="curtain">
+  <div class="curtain-sigil" id="curtain-sigil">
+    <div class="curtain-sigil-ring"></div>
+    <span class="curtain-sigil-glyph">✦</span>
+  </div>
+</div>
 <div id="progress-bar"></div>
 
 <!-- ══════════ CURSOR — Quill Pen ══════════ -->
@@ -78,6 +83,7 @@
 
   <ul class="nav-links">
     <li><a class="nav-link" data-scene="lore"      href="#lore">Lore</a></li>
+    <li><a class="nav-link" data-scene="profiles"  href="#profiles">Profiles</a></li>
     <li><a class="nav-link" data-scene="abilities" href="#abilities">Abilities</a></li>
     <li><a class="nav-link" data-scene="gallery"   href="#gallery">Gallery</a></li>
     <li><a class="nav-link" data-scene="system"    href="#system">System</a></li>
@@ -96,6 +102,7 @@
 <!-- Mobile nav -->
 <div class="nav-mobile" id="mobile-menu">
   <a data-scene="lore"      href="#lore">Lore</a>
+  <a data-scene="profiles"  href="#profiles">Profiles</a>
   <a data-scene="abilities" href="#abilities">Abilities</a>
   <a data-scene="gallery"   href="#gallery">Gallery</a>
   <a data-scene="system"    href="#system">System</a>
@@ -109,6 +116,34 @@
 <main id="app">
   <!-- Scenes will be injected here dynamically -->
 </main>
+
+<!-- ══════════ TERMINAL ══════════ -->
+<div id="terminal-overlay" aria-hidden="true">
+  <div id="terminal-window">
+    <div id="terminal-header">
+      <span class="terminal-title">natsume@w-AI-fu:~$</span>
+      <button id="terminal-close" aria-label="Close terminal">✕</button>
+    </div>
+    <div id="terminal-output"></div>
+    <div id="terminal-input-row">
+      <span class="terminal-prompt">$&nbsp;</span>
+      <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" placeholder="type a command…">
+    </div>
+  </div>
+</div>
+<button id="terminal-btn" title="Terminal  (`)">&#62;_</button>
+
+<!-- ══════════ LIGHTBOX ══════════ -->
+<div id="lightbox" aria-hidden="true">
+  <div id="lightbox-backdrop"></div>
+  <button id="lightbox-close" aria-label="Close">✕</button>
+  <button class="lightbox-nav" id="lightbox-prev" aria-label="Previous">&#8592;</button>
+  <button class="lightbox-nav" id="lightbox-next" aria-label="Next">&#8594;</button>
+  <figure id="lightbox-figure">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+</div>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>

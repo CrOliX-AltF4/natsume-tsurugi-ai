@@ -201,7 +201,45 @@ h3 { font-size: clamp(18px, 2.5vw, 26px); }
   z-index: 9000;
   pointer-events: none;
   background: var(--black);
-  transform: translateY(-100%);
+  transform: translateY(0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.curtain-sigil {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.curtain-sigil-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(154,123,63,0.35);
+  box-shadow: 0 0 20px rgba(139,26,26,0.2), inset 0 0 20px rgba(139,26,26,0.1);
+}
+
+.curtain-sigil-ring::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(154,123,63,0.15);
+}
+
+.curtain-sigil-glyph {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(154,123,63,0.5), 0 0 8px rgba(192,57,43,0.3);
+  position: relative;
 }
 
 

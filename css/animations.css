@@ -76,6 +76,23 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ── HERO RUNE RING ── */
+.hero-rune-ring {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  animation: runeRingRotate 60s linear infinite;
+  will-change: transform;
+}
+
+@keyframes runeRingRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 /* ── AETHER RINGS ── */
 .aether-ring {
   position: absolute;
