@@ -1,0 +1,33 @@
+{
+  "name": "Natsume Tsurugi",
+  "short_name": "Natsume",
+  "description": "Not a tool. Not an assistant. A warrior entity born from the memories of fallen heroes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080608",
+  "theme_color": "#8B1A1A",
+  "orientation": "any",
+  "categories": ["entertainment"],
+  "icons": [
+    {
+      "src": "assets/natsume-CV2.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/crest.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/og-image.png",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

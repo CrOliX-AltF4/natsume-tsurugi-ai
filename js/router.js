@@ -24,7 +24,8 @@ const Router = (() => {
       // Intersection observer check
       Animations.checkReveals(scene);
       // Re-init specific animations if needed
-      if (scene.id === 'scene-hero') GlyphWriter.init();
+      if (scene.id === 'scene-hero') { GlyphWriter.init(); Affinity.applyRingSpeed(); }
+      if (scene.id === 'scene-lore') CodexExpand.initScene(scene);
       if (scene.id === 'scene-gallery') Carousel.init('carousel-gallery');
       if (scene.id === 'scene-system') {
         Pipeline.init();

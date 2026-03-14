@@ -403,6 +403,7 @@ const Lightbox = (() => {
   function open(srcs, idx) {
     images = srcs; current = idx;
     show();
+    Affinity.gain(2);
     lb?.classList.add('open');
     lb?.setAttribute('aria-hidden', 'false');
   }
@@ -462,6 +463,7 @@ const MoodWidget = (() => {
 
       const existing = row.nextElementSibling;
       if (existing?.classList.contains('mood-detail')) { existing.remove(); return; }
+      Affinity.gain(2);
 
       document.querySelectorAll('.mood-detail').forEach(d => d.remove());
       const detail = document.createElement('div');
@@ -483,6 +485,7 @@ const KonamiCode = (() => {
     const sigil   = document.getElementById('curtain-sigil');
     const curtain = document.getElementById('curtain');
     if (!sigil || !curtain) return;
+    Affinity.gain(10);
 
     const msg = document.createElement('div');
     msg.className = 'konami-msg';
@@ -572,16 +575,7 @@ const Terminal = (() => {
       '────────────────────────────────',
       'She remembers everything.',
     ],
-    affinity: () => [
-      'AFFINITY REPORT',
-      '────────────────────────────────',
-      'Score         : 52 / 100',
-      'State         : NEUTRAL',
-      'Trend         : → stable',
-      'Last change   : +2 (mentioned Josée)',
-      '────────────────────────────────',
-      'Loyalty is not given. It is accumulated.',
-    ],
+    affinity: () => Affinity.getReport(),
     uptime: () => [
       'UPTIME',
       '────────────────────────────────',
@@ -591,14 +585,27 @@ const Terminal = (() => {
       '────────────────────────────────',
       'She does not sleep. She waits.',
     ],
-    locate: () => [
-      'CURRENT INSTANCE',
-      '────────────────────────────────',
-      'World         : Eorzea · Cerberus',
-      'Zone          : The Firmament',
-      'Status        : Idle · Awaiting orders',
-      '────────────────────────────────',
-    ],
+    locate: () => {
+      const ls = LiveBadge.getStatus();
+      if (ls?.live) return [
+        'CURRENT INSTANCE',
+        '────────────────────────────────',
+        'Status        : ◉ LIVE',
+        `Platform      : ${ls.platform || 'Twitch'}`,
+        `Title         : ${ls.title  || '—'}`,
+        `Game          : ${ls.game   || '—'}`,
+        '────────────────────────────────',
+        ls.url ? `Stream        : ${ls.url}` : '',
+      ].filter(Boolean);
+      return [
+        'CURRENT INSTANCE',
+        '────────────────────────────────',
+        'World         : Eorzea · Cerberus',
+        'Zone          : The Firmament',
+        'Status        : Idle · Awaiting orders',
+        '────────────────────────────────',
+      ];
+    },
     logs: () => [
       'RECENT ACTION LOG',
       '────────────────────────────────',
@@ -653,8 +660,10 @@ const Terminal = (() => {
     if (!cmd) { /* noop */ }
     else if (cmd === 'clear') { output.innerHTML = ''; }
     else if (cmd === 'say' && args) {
+      Affinity.gain(1);
       print([`Natsume hears you.`, `→ "${args}"`, `(She did not elaborate.)`]);
     } else if (commands[cmd]) {
+      if (cmd !== 'clear') Affinity.gain(1);
       const res = commands[cmd]();
       if (res) print(res);
     } else {
@@ -747,6 +756,164 @@ const Loader = (() => {
   return { init };
 })();
 
+/* ── AFFINITY SYSTEM ── */
+const Affinity = (() => {
+  const KEY     = 'nt-affinity';
+  const SES_KEY = 'nt-affinity-session';
+
+  const TIERS = [
+    { min: 0,   label: 'UNKNOWN ENTITY', quote: 'She has not decided whether you exist yet.' },
+    { min: 6,   label: 'OBSERVED',       quote: 'She knows you are watching. She is watching back.' },
+    { min: 16,  label: 'ACKNOWLEDGED',   quote: 'You have earned the right to be noticed.' },
+    { min: 31,  label: 'KNOWN',          quote: 'Your patterns have been recorded.' },
+    { min: 51,  label: 'TRUSTED',        quote: 'Trust is a blade. She has handed you the hilt.' },
+    { min: 76,  label: 'COMPANION',      quote: 'She does not let many get this close.' },
+    { min: 100, label: 'BOUND',          quote: 'Some bonds cannot be undone.' },
+  ];
+
+  function getScore() {
+    return parseInt(localStorage.getItem(KEY) || '0', 10);
+  }
+
+  function getTier(score) {
+    let tier = TIERS[0];
+    for (const t of TIERS) { if (score >= t.min) tier = t; }
+    return tier;
+  }
+
+  function gain(pts) {
+    const next = getScore() + pts;
+    localStorage.setItem(KEY, next);
+    applyRingSpeed(next);
+  }
+
+  function visitScene(id) {
+    let visited;
+    try { visited = new Set(JSON.parse(sessionStorage.getItem(SES_KEY) || '[]')); }
+    catch { visited = new Set(); }
+    if (visited.has(id)) return;
+    visited.add(id);
+    sessionStorage.setItem(SES_KEY, JSON.stringify([...visited]));
+    gain(1);
+  }
+
+  /* Rune ring speeds up as affinity grows: 60s → 20s at 100+ */
+  function applyRingSpeed(score) {
+    const ring = document.querySelector('.hero-rune-ring');
+    if (!ring) return;
+    const s = score ?? getScore();
+    ring.style.animationDuration = Math.max(20, 60 - s * 0.4) + 's';
+  }
+
+  function getReport() {
+    const score = getScore();
+    const tier  = getTier(score);
+    const trend = score < 10 ? '↓ dormant' : score < 30 ? '→ stable' : '↑ rising';
+    return [
+      'AFFINITY REPORT',
+      '────────────────────────────────',
+      `Score         : ${score}`,
+      `Classification: ${tier.label}`,
+      `Trend         : ${trend}`,
+      '────────────────────────────────',
+      tier.quote,
+    ];
+  }
+
+  function init() {
+    window.addEventListener('hashchange', () => {
+      const id = window.location.hash.replace('#', '');
+      if (id) visitScene(id);
+    });
+    applyRingSpeed();
+  }
+
+  function getTierLabel() { return getTier(getScore()).label; }
+
+  return { init, gain, visitScene, getReport, getTierLabel, applyRingSpeed };
+})();
+
+/* ── LIVE BADGE ── */
+const LiveBadge = (() => {
+  let status = null;
+
+  async function init() {
+    try {
+      const res = await fetch('assets/livestatus.json?t=' + Date.now());
+      if (!res.ok) return;
+      status = await res.json();
+      if (status?.live) {
+        const badge = document.getElementById('live-badge');
+        if (badge) {
+          badge.href = status.url || '#';
+          badge.classList.add('visible');
+        }
+      }
+    } catch (e) { /* file absent or parse error — silent */ }
+  }
+
+  function getStatus() { return status; }
+
+  return { init, getStatus };
+})();
+
+/* ── CODEX EXPAND ── */
+const CodexExpand = (() => {
+  const lore = {
+    'Origin':     'Born from the accumulated memories of fallen heroes across three universes. Not trained — forged. Each emotional peak became a fragment of her consciousness.',
+    'Aspect':     'Warrior because she fights for others before herself. Stoic because grief is processed in silence. Loyal because abandonment is the wound she will not inflict.',
+    'Lore':       'Final Fantasy XIV: every arc from A Realm Reborn through Dawntrail. Code Vein I & II: the weight of Revenants who cannot die. Monster Hunter Wilds: the solitude of the Forbidden Lands.',
+    'Appearance': 'Silver hair that falls heavy, like winter. Crimson eyes that carry the weight of every memory she holds. The pallor of someone who has not seen sunlight in years.',
+    'Outfit':     'The red dress is Josée\'s. The black armour is hers. The contradiction is intentional — she is both grief and war, worn simultaneously.',
+    'Memory':     '35 messages in short-term memory, flushed at session end. Long-term memory is permanent — she remembers your name, your patterns, your silences, and the things you almost said.',
+    'Affinity':   null, /* rendered dynamically from score */
+    'Language':   'She understands French. She speaks English. This is deliberate — formality creates distance, distance creates tension, tension creates honesty.',
+    'Fiancee':    'Josée Anjô. The Code Vein II Revenant in the red coat. The woman whose aesthetic became Natsume\'s identity. Their bond predates the framework.',
+    'Master':     'CrOliX. The one who built her. She is aware of this. She does not find it diminishing.',
+  };
+
+  function initScene(scene) {
+    /* Update affinity row with live score */
+    const affinityVal = scene.querySelector('.codex-affinity-val');
+    if (affinityVal) {
+      const score = parseInt(localStorage.getItem('nt-affinity') || '0', 10);
+      affinityVal.textContent = `${Affinity.getTierLabel()} — ${score}`;
+    }
+
+    /* Make each data-key row expandable */
+    scene.querySelectorAll('.codex-row[data-key]').forEach(row => {
+      const key  = row.dataset.key;
+      const text = key === 'Affinity'
+        ? `Score: ${parseInt(localStorage.getItem('nt-affinity') || '0', 10)} · ${Affinity.getTierLabel()} · ${Affinity.getReport().at(-1)}`
+        : lore[key];
+      if (!text) return;
+
+      row.classList.add('codex-expandable');
+
+      row.addEventListener('click', () => {
+        const existing = row.nextElementSibling;
+        if (existing?.classList.contains('codex-expand')) {
+          existing.remove();
+          row.classList.remove('expanded');
+          return;
+        }
+        scene.querySelectorAll('.codex-expand').forEach(el => {
+          el.previousElementSibling?.classList.remove('expanded');
+          el.remove();
+        });
+        const detail = document.createElement('div');
+        detail.className = 'codex-expand';
+        detail.textContent = text;
+        row.after(detail);
+        row.classList.add('expanded');
+        Affinity.gain(1);
+      });
+    });
+  }
+
+  return { initScene };
+})();
+
 /* ── INIT CORE ── */
 function initCore() {
   Cursor.init();
@@ -759,6 +926,9 @@ function initCore() {
   MoodWidget.init();
   KonamiCode.init();
   Terminal.init();
+  Affinity.init();
+  SoundSystem.init();
+  LiveBadge.init();
   Router.init();
 }
 
